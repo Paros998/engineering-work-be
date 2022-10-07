@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pg.search.store</groupId>
+    <artifactId>search-store</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1</version>
+
+    <modules>
+        <module>pg.search.store.domain</module>
+        <module>pg.search.store.application</module>
+        <module>pg.search.store.infrastructure</module>
+        <module>pg.search.store.infrastructure.spring</module>
+        <module>pg.search.store.standalone</module>
+        <module>pg.search.store.integration-tests</module>
+    </modules>
+
+    <name>pg.search.store</name>
+    <description>Backend app for Search Store app</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Dependency versions -->
+        <spring-boot-starter-version>2.7.4</spring-boot-starter-version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.7.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Inner modules -->
+            <dependency>
+                <groupId>pg.search.store</groupId>
+                <artifactId>pg.search.store.infrastructure-spring</artifactId>
+                <version>0.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>pg.search.store</groupId>
+                <artifactId>pg.search.store.infrastructure</artifactId>
+                <version>0.0.1</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>19</source>
+                    <target>19</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
