@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component LANGUAGE_LEVEL="JDK_19" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/pg.search.store.integration-tests/target/test-classes"/>
+	<contentEntry url="file://$MODULE_DIR$/pg.search.store.integration-tests">
+		<testFolder url="file://$MODULE_DIR$/pg.search.store.integration-tests/src/test/java"/>
+		<excludeFolder url="file://$MODULE_DIR$/pg.search.store.integration-tests/target"/>
+	</contentEntry>
+</component>
