@@ -28,8 +28,10 @@
         <!-- Dependency versions -->
         <spring-framework-version>5.3.23</spring-framework-version>
         <spring-boot-starter-version>2.7.4</spring-boot-starter-version>
-        <pg-lib-cqrs-version>1.0.0</pg-lib-cqrs-version>
+
+        <pg-lib-cqrs-version>1.0.1</pg-lib-cqrs-version>
         <pg-lib-aws-version>1.0.1</pg-lib-aws-version>
+
         <kaczmarzyk-specification-version>2.6.3</kaczmarzyk-specification-version>
         <springdoc-openapi-version>1.6.11</springdoc-openapi-version>
         <jwt-api-version>0.11.5</jwt-api-version>

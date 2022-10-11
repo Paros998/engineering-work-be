@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import pg.lib.awsfiles.config.AmazonConfig;
+import pg.lib.cqrs.config.CommandQueryAutoConfiguration;
 import pg.search.store.infrastructure.spring.configuration.app.*;
 
 @Configuration
@@ -15,6 +16,7 @@ import pg.search.store.infrastructure.spring.configuration.app.*;
         SwaggerConfiguration.class,
         PasswordEncoder.class,
         ApplicationSecurityConfig.class,
+        CommandQueryAutoConfiguration.class,
         AmazonConfig.class,
         SearchStoreInfrastructureConfiguration.class
 })
