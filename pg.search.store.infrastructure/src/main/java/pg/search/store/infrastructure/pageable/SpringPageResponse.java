@@ -1,7 +1,8 @@
-package pg.search.store.infrastructure.common;
+package pg.search.store.infrastructure.pageable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import org.springframework.data.domain.Page;
 
 import java.util.List;

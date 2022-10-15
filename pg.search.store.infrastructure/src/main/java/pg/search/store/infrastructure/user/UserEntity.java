@@ -1,24 +1,28 @@
-package pg.search.store.infrastructure.entity;
+package pg.search.store.infrastructure.user;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import pg.lib.awsfiles.entity.FileEntity;
+
 import pg.search.store.domain.user.Roles;
-import pg.search.store.domain.user.UserCredentials;
+import pg.search.store.domain.user.UserCredentialsData;
 
 import javax.persistence.*;
+
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @Entity
 @Table(name = "users")
 public class UserEntity implements UserDetails {
@@ -69,13 +73,13 @@ public class UserEntity implements UserDetails {
 //    @ElementCollection(fetch = FetchType.LAZY, targetClass = UUID.class)
 //    private List<UUID> followedCards;
 
-    public UserEntity(final UserCredentials userCredentials,
+    public UserEntity(final UserCredentialsData credentials,
                       final Boolean locked,
                       final Boolean enabled) {
-        this.username = userCredentials.getUsername();
-        this.password = userCredentials.getPassword();
-        this.email = userCredentials.getEmail();
-        this.role = userCredentials.getRole();
+        this.username = credentials.getUsername();
+        this.password = credentials.getPassword();
+        this.email = credentials.getEmail();
+        this.role = credentials.getRole();
         this.locked = locked;
         this.enabled = enabled;
     }
@@ -117,5 +121,18 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        UserEntity that = (UserEntity) o;
+        return userId != null && Objects.equals(userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

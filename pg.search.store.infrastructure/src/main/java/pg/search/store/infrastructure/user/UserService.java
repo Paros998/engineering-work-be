@@ -1,19 +1,19 @@
-package pg.search.store.infrastructure.service;
+package pg.search.store.infrastructure.user;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
-import pg.search.store.domain.user.ChangePassword;
-import pg.search.store.domain.user.RegisterClient;
-import pg.search.store.domain.user.UserCredentials;
-import pg.search.store.domain.user.UserUpdate;
-import pg.search.store.infrastructure.common.SpringPageRequest;
-import pg.search.store.infrastructure.common.SpringPageResponse;
-import pg.search.store.infrastructure.entity.UserEntity;
+
+import pg.search.store.domain.user.ChangePasswordData;
+import pg.search.store.domain.user.RegisterClientData;
+import pg.search.store.domain.user.UpdateUsernameEmailData;
+import pg.search.store.domain.user.UserCredentialsData;
+import pg.search.store.infrastructure.pageable.SpringPageRequest;
+import pg.search.store.infrastructure.pageable.SpringPageResponse;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface IUserService extends UserDetailsService {
+public interface UserService extends UserDetailsService {
 
     UserEntity getUser(UUID userId);
 
@@ -27,17 +27,17 @@ public interface IUserService extends UserDetailsService {
 
     SpringPageResponse<UserEntity> getUsers(SpringPageRequest pageRequest);
 
-    UserEntity createUser(UserCredentials userCredentials);
+    UserEntity createUser(UserCredentialsData credentials);
 
-    UserEntity createClient(RegisterClient registerClient);
+    UserEntity createClient(RegisterClientData data);
 
     void uploadUserAvatar(UUID userId, MultipartFile file);
 
     void updateUser(UserEntity user);
 
-    void changeUserPassword(UUID userId, ChangePassword changePassword);
+    void changeUserPassword(UUID userId, ChangePasswordData changePasswordData);
 
-    void updateUser(UUID userId, UserUpdate userUpdate);
+    void updateUser(UUID userId, UpdateUsernameEmailData userData);
 
     void updateUserAvatar(UUID userId, MultipartFile file);
 

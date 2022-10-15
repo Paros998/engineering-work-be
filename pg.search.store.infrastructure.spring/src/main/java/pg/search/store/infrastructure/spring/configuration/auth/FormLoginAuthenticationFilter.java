@@ -1,22 +1,25 @@
 package pg.search.store.infrastructure.spring.configuration.auth;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pg.search.store.infrastructure.service.IUserService;
+
+import pg.search.store.infrastructure.user.UserService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -30,7 +33,7 @@ import static pg.search.store.infrastructure.spring.configuration.auth.JwtExpire
 public class FormLoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private static final boolean POST_ONLY = true;
     private final AuthenticationManager authenticationManager;
-    private final IUserService userService;
+    private final UserService userService;
     private final String secretKey;
 
     @Override
@@ -49,7 +52,7 @@ public class FormLoginAuthenticationFilter extends UsernamePasswordAuthenticatio
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
 
         this.setDetails(request, authRequest);
- 
+
         return authenticationManager.authenticate(authRequest);
 
     }

@@ -1,6 +1,7 @@
-package pg.search.store.infrastructure.common;
+package pg.search.store.infrastructure.pageable;
 
 import lombok.Data;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;

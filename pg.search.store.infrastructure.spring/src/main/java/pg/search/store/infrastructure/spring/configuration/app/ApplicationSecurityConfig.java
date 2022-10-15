@@ -1,6 +1,5 @@
 package pg.search.store.infrastructure.spring.configuration.app;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,21 +13,22 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import pg.search.store.infrastructure.service.IUserService;
+
 import pg.search.store.infrastructure.spring.configuration.auth.FormLoginAuthenticationFilter;
 import pg.search.store.infrastructure.spring.configuration.auth.JwtTokenFilter;
+import pg.search.store.infrastructure.user.UserService;
 
 @Configuration
 @EnableWebSecurity
 @EnableWebMvc
 @EnableScheduling
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final IUserService userService;
+    private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final String jwtSecret;
 
     @Autowired
-    public ApplicationSecurityConfig(final IUserService userService,
+    public ApplicationSecurityConfig(final UserService userService,
                                      final BCryptPasswordEncoder bCryptPasswordEncoder,
                                      final @Value("${jwt.secret}") String jwtSecret) {
         this.userService = userService;

@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import pg.search.store.infrastructure.entity.UserEntity;
-import pg.search.store.infrastructure.service.IUserService;
+
+import pg.search.store.infrastructure.user.UserEntity;
+import pg.search.store.infrastructure.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
@@ -26,11 +28,11 @@ import static pg.search.store.infrastructure.spring.configuration.auth.JwtExpire
 @Service
 public class JwtTokenRefresher {
     private static final String AUTH_BEARER = "Bearer";
-    private final IUserService userService;
+    private final UserService userService;
     private final String secretKey;
 
     @Autowired
-    public JwtTokenRefresher(final IUserService userService, final @Value("${jwt.secret}") String secretKey) {
+    public JwtTokenRefresher(final UserService userService, final @Value("${jwt.secret}") String secretKey) {
         this.userService = userService;
         this.secretKey = secretKey;
     }

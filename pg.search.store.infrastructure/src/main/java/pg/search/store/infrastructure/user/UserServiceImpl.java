@@ -1,32 +1,33 @@
-package pg.search.store.infrastructure.service;
+package pg.search.store.infrastructure.user;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
 import pg.lib.awsfiles.entity.FileEntity;
-import pg.lib.awsfiles.service.IFileService;
+import pg.lib.awsfiles.service.FileService;
+
 import pg.search.store.domain.user.*;
-import pg.search.store.infrastructure.common.SpringPageRequest;
-import pg.search.store.infrastructure.common.SpringPageResponse;
-import pg.search.store.infrastructure.entity.UserEntity;
-import pg.search.store.infrastructure.repository.UserRepository;
+import pg.search.store.infrastructure.pageable.SpringPageRequest;
+import pg.search.store.infrastructure.pageable.SpringPageResponse;
 
 import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
 @Slf4j
-public class UserService implements IUserService {
+public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND = "User with username %s not found";
     private static final UUID BasicUserPhoto = UUID.fromString("ffffffff-ffff-eeee-ffff-ffffffffffff");
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
-    private final IFileService fileService;
+    private final FileService fileService;
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
@@ -37,7 +38,7 @@ public class UserService implements IUserService {
 
     public UserEntity getUser(final UUID userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with given userId %s doesn't exist!", userId))
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with given userId %s " + "doesn't exist!", userId))
         );
     }
 
@@ -68,16 +69,16 @@ public class UserService implements IUserService {
         return new SpringPageResponse<>(userRepository.findAll(pageRequestDTO.getRequest(UserEntity.class)));
     }
 
-    public UserEntity createUser(final UserCredentials userCredentials) {
-        checkForEmailDuplicates(userCredentials.getEmail());
+    public UserEntity createUser(final UserCredentialsData credentials) {
+        checkForEmailDuplicates(credentials.getEmail());
 
 
-        checkForUsernameDuplicates(userCredentials.getUsername());
+        checkForUsernameDuplicates(credentials.getUsername());
 
 
-        userCredentials.setPassword(bCryptPasswordEncoder.encode(userCredentials.getPassword()));
+        credentials.setPassword(bCryptPasswordEncoder.encode(credentials.getPassword()));
 
-        UserEntity user = new UserEntity(userCredentials, false, true);
+        UserEntity user = new UserEntity(credentials, false, true);
 
         userRepository.save(user);
 
@@ -88,23 +89,23 @@ public class UserService implements IUserService {
         return user;
     }
 
-    public UserEntity createClient(final RegisterClient registerClient) {
-        checkForEmailDuplicates(registerClient.getEmail());
+    public UserEntity createClient(final RegisterClientData data) {
+        checkForEmailDuplicates(data.getEmail());
 
 
-        checkForUsernameDuplicates(registerClient.getUsername());
+        checkForUsernameDuplicates(data.getUsername());
 
-        registerClient.setPassword(bCryptPasswordEncoder.encode(registerClient.getPassword()));
+        data.setPassword(bCryptPasswordEncoder.encode(data.getPassword()));
 
         UserEntity user = new UserEntity(
-                new UserCredentials(registerClient.getUsername(), registerClient.getPassword(), registerClient.getEmail(), Roles.CLIENT),
+                new UserCredentialsData(data.getUsername(), data.getPassword(), data.getEmail(), Roles.CLIENT),
                 false,
                 true
         );
 
         userRepository.save(user);
 
-        user.setAvatar(fileService.getFileById(registerClient.getFileId()));
+        user.setAvatar(fileService.getFileById(data.getFileId()));
 
         userRepository.save(user);
 
@@ -125,37 +126,37 @@ public class UserService implements IUserService {
         userRepository.save(user);
     }
 
-    public void changeUserPassword(final UUID userId, final ChangePassword changePassword) {
+    public void changeUserPassword(final UUID userId, final ChangePasswordData data) {
         UserEntity user = getUser(userId);
 
-        if (!bCryptPasswordEncoder.matches(changePassword.getOldPassword(), user.getPassword()))
+        if (!bCryptPasswordEncoder.matches(data.getOldPassword(), user.getPassword()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Old password doesn't match existing one");
 
-        if (bCryptPasswordEncoder.matches(changePassword.getNewPassword(), user.getPassword()))
+        if (bCryptPasswordEncoder.matches(data.getNewPassword(), user.getPassword()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password and current password are the same");
 
-        user.setPassword(bCryptPasswordEncoder.encode(changePassword.getNewPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(data.getNewPassword()));
 
         userRepository.save(user);
     }
 
-    public void updateUser(final UUID userId, final UserUpdate userUpdate) {
+    public void updateUser(final UUID userId, final UpdateUsernameEmailData userData) {
         UserEntity user = getUser(userId);
 
         //TODO fix update
-        if (!user.getEmail().equals(userUpdate.getEmail().trim())) {
-            checkForEmailDuplicates(userUpdate.getEmail());
+        if (!user.getEmail().equals(userData.getEmail().trim())) {
+            checkForEmailDuplicates(userData.getEmail());
         }
 
-        if (!user.getUsername().equals(userUpdate.getUsername().trim())) {
-            checkForUsernameDuplicates(userUpdate.getUsername());
+        if (!user.getUsername().equals(userData.getUsername().trim())) {
+            checkForUsernameDuplicates(userData.getUsername());
         }
 
-        if (!userUpdate.getUsername().isEmpty())
-            user.setUsername(userUpdate.getUsername().trim());
+        if (!userData.getUsername().isEmpty())
+            user.setUsername(userData.getUsername().trim());
 
-        if (!userUpdate.getEmail().isEmpty())
-            user.setEmail(userUpdate.getEmail().trim());
+        if (!userData.getEmail().isEmpty())
+            user.setEmail(userData.getEmail().trim());
 
         userRepository.save(user);
     }

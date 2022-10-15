@@ -38,5 +38,7 @@ public class SwaggerConfiguration {
     }
 
     @GetMapping
-    public RedirectView redirectView(){return new RedirectView("/swagger-ui.html");}
+    public RedirectView redirectView() {
+        return new RedirectView("/swagger-ui.html");
+    }
 }

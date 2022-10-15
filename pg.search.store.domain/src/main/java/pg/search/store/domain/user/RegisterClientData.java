@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterClient {
+public class RegisterClientData {
     private UUID fileId;
     private String email;
     private String username;
