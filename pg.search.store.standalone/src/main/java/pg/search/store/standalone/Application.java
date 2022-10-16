@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import pg.search.store.infrastructure.spring.SearchStoreModuleConfiguration;
+import pg.search.store.spring.SearchStoreModuleConfiguration;
 
 import java.util.List;
 

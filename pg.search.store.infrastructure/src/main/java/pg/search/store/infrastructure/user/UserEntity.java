@@ -13,13 +13,13 @@ import pg.lib.awsfiles.entity.FileEntity;
 
 import pg.search.store.domain.user.Roles;
 import pg.search.store.domain.user.UserCredentialsData;
+import pg.search.store.infrastructure.notification.NotificationEntity;
+import pg.search.store.infrastructure.review.ReviewEntity;
+import pg.search.store.infrastructure.user.settings.SettingsEntity;
 
 import javax.persistence.*;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -54,24 +54,23 @@ public class UserEntity implements UserDetails {
     @JsonManagedReference
     private FileEntity avatar;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_settings_Id")
-//    private UserSettings userSettings;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @JsonManagedReference
-//    private List<Notification> notifications;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @JsonManagedReference
-//    private List<Review> reviews;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @JsonManagedReference
-//    private List<History> userHistory;
-//
-//    @ElementCollection(fetch = FetchType.LAZY, targetClass = UUID.class)
-//    private List<UUID> followedCards;
+    @OneToOne
+    @JoinColumn(name = "settings_Id")
+    private SettingsEntity userSettings;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<NotificationEntity> notifications;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<ReviewEntity> reviews;
+
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = UUID.class)
+    private List<UUID> followedProducts;
+
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = UUID.class)
+    private List<UUID> markedForBuyProducts;
 
     public UserEntity(final UserCredentialsData credentials,
                       final Boolean locked,

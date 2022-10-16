@@ -9,7 +9,7 @@ import pg.search.store.infrastructure.store.StoreEntity;
 
 import javax.persistence.*;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreOfferEntity {
+public class StoreOfferEntity implements Serializable {
     @Id
     @GeneratedValue(
             strategy = GenerationType.AUTO
@@ -40,7 +40,7 @@ public class StoreOfferEntity {
 
     private Boolean hasFreeShipping;
 
-    private BigDecimal price;
+    private Double price;
 
     @ManyToOne
     @JoinColumn(name = "store_id")

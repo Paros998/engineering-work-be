@@ -7,19 +7,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import pg.lib.awsfiles.entity.FileEntity;
 import pg.lib.awsfiles.service.FileService;
 
+import pg.search.store.domain.product.ProductType;
 import pg.search.store.domain.user.*;
-import pg.search.store.infrastructure.pageable.SpringPageRequest;
-import pg.search.store.infrastructure.pageable.SpringPageResponse;
+import pg.search.store.infrastructure.common.pageable.SpringPageRequest;
+import pg.search.store.infrastructure.common.pageable.SpringPageResponse;
+import pg.search.store.infrastructure.product.ProductEntity;
+import pg.search.store.infrastructure.product.ProductRepository;
+import pg.search.store.infrastructure.user.settings.SettingsService;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 @AllArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -27,7 +33,9 @@ public class UserServiceImpl implements UserService {
     private static final UUID BasicUserPhoto = UUID.fromString("ffffffff-ffff-eeee-ffff-ffffffffffff");
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final FileService fileService;
+    private final SettingsService settingsService;
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
@@ -57,7 +65,8 @@ public class UserServiceImpl implements UserService {
 
     public UserEntity getUserByEmail(final String email) {
         return userRepository.findByEmail(email).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with given email %s doesn't exist in database!", email))
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with given email %s doesn't exist in " +
+                        "database!", email))
         );
     }
 
@@ -69,12 +78,19 @@ public class UserServiceImpl implements UserService {
         return new SpringPageResponse<>(userRepository.findAll(pageRequestDTO.getRequest(UserEntity.class)));
     }
 
+    public List<ProductEntity> getUserFollowedProducts(final UUID userId, final ProductType productType) {
+        UserEntity user = userRepository.getReferenceById(userId);
+
+        if (productType == null)
+            return productRepository.findByProductIdIn(user.getFollowedProducts());
+
+        return productRepository.findByProductIdInAndProductType(user.getFollowedProducts(), productType);
+    }
+
     public UserEntity createUser(final UserCredentialsData credentials) {
         checkForEmailDuplicates(credentials.getEmail());
 
-
         checkForUsernameDuplicates(credentials.getUsername());
-
 
         credentials.setPassword(bCryptPasswordEncoder.encode(credentials.getPassword()));
 
@@ -82,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-//        user.setUserSettings(settingsService.createUserSettings(user));
+        user.setUserSettings(settingsService.createUserSettings(user));
 
         userRepository.save(user);
 
@@ -91,7 +107,6 @@ public class UserServiceImpl implements UserService {
 
     public UserEntity createClient(final RegisterClientData data) {
         checkForEmailDuplicates(data.getEmail());
-
 
         checkForUsernameDuplicates(data.getUsername());
 

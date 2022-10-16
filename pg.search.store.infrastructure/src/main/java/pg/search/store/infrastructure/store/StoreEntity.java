@@ -11,6 +11,7 @@ import pg.search.store.infrastructure.store.offer.StoreOfferEntity;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreEntity {
+public class StoreEntity implements Serializable {
     @Id
     @GeneratedValue(
             strategy = GenerationType.AUTO

@@ -2,12 +2,15 @@ package pg.search.store.infrastructure.product.suggested;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.stereotype.Service;
+
 import pg.search.store.domain.product.ProductType;
-import pg.search.store.infrastructure.pageable.SpringPageRequest;
-import pg.search.store.infrastructure.pageable.SpringPageResponse;
+import pg.search.store.infrastructure.common.pageable.SpringPageRequest;
+import pg.search.store.infrastructure.common.pageable.SpringPageResponse;
 
 import java.util.List;
 
+@Service
 @AllArgsConstructor
 public class SuggestedProductServiceImpl implements SuggestedProductService {
     private final SuggestedProductRepository productRepository;

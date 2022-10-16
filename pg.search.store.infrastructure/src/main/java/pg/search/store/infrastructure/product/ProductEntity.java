@@ -9,6 +9,7 @@ import pg.search.store.domain.product.ProductType;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class ProductEntity {
+public abstract class ProductEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
@@ -28,4 +29,6 @@ public abstract class ProductEntity {
 
     @Enumerated(EnumType.STRING)
     protected ProductType productType;
+
+    protected String title;
 }
