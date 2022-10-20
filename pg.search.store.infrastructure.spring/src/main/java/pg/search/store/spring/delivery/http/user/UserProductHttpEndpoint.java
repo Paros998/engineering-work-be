@@ -1,16 +1,17 @@
 package pg.search.store.spring.delivery.http.user;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import pg.lib.cqrs.service.ServiceExecutor;
 
+import pg.search.store.application.cqrs.product.command.RemoveProductFromUserFollowedCommand;
+import pg.search.store.application.cqrs.product.command.SaveFollowedProductToUserCommand;
 import pg.search.store.application.cqrs.product.query.GetUserFollowedProductsQuery;
+import pg.search.store.application.cqrs.user.query.UserFollowsProductQuery;
 import pg.search.store.domain.product.BasicProduct;
 
 import java.util.List;
@@ -31,13 +32,20 @@ public class UserProductHttpEndpoint {
         return serviceExecutor.executeQuery(query);
     }
 
-//    @PutMapping("{userId}/follow-card/{cardId}")
-//    public void addCardToUserFollowed(final @PathVariable UUID userId, final @PathVariable UUID cardId) {
-//        userService.addCardToUserFollowed(userId, cardId);
-//    }
-//
-//    @PutMapping("{userId}/unfollow-card/{cardId}")
-//    public void removeCardFromUserFollowed(final @PathVariable UUID userId, final @PathVariable UUID cardId) {
-//        userService.removeCardFromUserFollowed(userId, cardId);
-//    }
+    @GetMapping("{userId}/follows/{productId}")
+    public Boolean isUserFollowingProduct(final @PathVariable @NonNull UUID userId, final @PathVariable @NonNull UUID productId) {
+        return serviceExecutor.executeQuery(UserFollowsProductQuery.of(userId, productId));
+    }
+
+    @PutMapping("{userId}/follow-product/{productId}")
+    public void saveProductToUserFollowed(final @PathVariable UUID userId, final @PathVariable UUID productId) {
+        final SaveFollowedProductToUserCommand command = SaveFollowedProductToUserCommand.of(userId, productId);
+        serviceExecutor.executeCommand(command);
+    }
+
+    @DeleteMapping("{userId}/unfollow-product/{productId}")
+    public void removeProductFromUserFollowed(final @PathVariable UUID userId, final @PathVariable UUID productId) {
+        final RemoveProductFromUserFollowedCommand command = RemoveProductFromUserFollowedCommand.of(userId, productId);
+        serviceExecutor.executeCommand(command);
+    }
 }

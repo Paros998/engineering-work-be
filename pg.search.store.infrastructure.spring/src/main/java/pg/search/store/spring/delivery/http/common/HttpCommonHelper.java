@@ -9,5 +9,5 @@ public class HttpCommonHelper {
 
     public static final String AUTH_PATH = BASE_PATH + "/auth";
 
-    public static final String USER_PATH = BASE_PATH + "/user";
+    public static final String USER_PATH = BASE_PATH + "/users";
 }

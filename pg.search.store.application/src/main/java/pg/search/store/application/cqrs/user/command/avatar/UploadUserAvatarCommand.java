@@ -1,4 +1,4 @@
-package pg.search.store.application.cqrs.user.command;
+package pg.search.store.application.cqrs.user.command.avatar;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @AllArgsConstructor(staticName = "of")
 @Getter
-public class UpdateUserAvatarCommand implements Command<Void> {
+public class UploadUserAvatarCommand implements Command<Void> {
     private final UUID userId;
     private final MultipartFile file;
 }

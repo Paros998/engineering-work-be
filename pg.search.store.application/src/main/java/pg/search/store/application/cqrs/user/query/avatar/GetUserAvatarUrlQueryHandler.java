@@ -1,4 +1,4 @@
-package pg.search.store.application.cqrs.user.query.handling;
+package pg.search.store.application.cqrs.user.query.avatar;
 
 import lombok.AllArgsConstructor;
 
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import pg.lib.cqrs.query.QueryHandler;
 
-import pg.search.store.application.cqrs.user.query.GetUserAvatarUrlQuery;
 import pg.search.store.infrastructure.user.UserService;
 
 @Service

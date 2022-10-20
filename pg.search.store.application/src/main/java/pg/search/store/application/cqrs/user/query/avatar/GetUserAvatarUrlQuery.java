@@ -1,14 +1,14 @@
-package pg.search.store.application.cqrs.user.command;
+package pg.search.store.application.cqrs.user.query.avatar;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import pg.lib.cqrs.command.Command;
+import pg.lib.cqrs.query.Query;
 
 import java.util.UUID;
 
 @AllArgsConstructor(staticName = "of")
 @Getter
-public class DeleteUserAvatarCommand implements Command<Void> {
+public class GetUserAvatarUrlQuery implements Query<String> {
     private final UUID userId;
 }

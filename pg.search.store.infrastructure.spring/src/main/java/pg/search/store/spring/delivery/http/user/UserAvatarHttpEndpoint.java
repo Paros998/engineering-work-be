@@ -8,10 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import pg.lib.cqrs.service.ServiceExecutor;
 
-import pg.search.store.application.cqrs.user.command.DeleteUserAvatarCommand;
-import pg.search.store.application.cqrs.user.command.UpdateUserAvatarCommand;
-import pg.search.store.application.cqrs.user.command.UploadUserAvatarCommand;
-import pg.search.store.application.cqrs.user.query.GetUserAvatarUrlQuery;
+import pg.search.store.application.cqrs.user.command.avatar.DeleteUserAvatarCommand;
+import pg.search.store.application.cqrs.user.command.avatar.UpdateUserAvatarCommand;
+import pg.search.store.application.cqrs.user.command.avatar.UploadUserAvatarCommand;
+import pg.search.store.application.cqrs.user.query.avatar.GetUserAvatarUrlQuery;
 import pg.search.store.spring.delivery.http.common.HttpCommonHelper;
 
 import java.util.UUID;

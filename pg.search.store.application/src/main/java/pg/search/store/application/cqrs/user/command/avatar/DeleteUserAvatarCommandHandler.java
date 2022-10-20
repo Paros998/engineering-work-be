@@ -1,4 +1,4 @@
-package pg.search.store.application.cqrs.user.command.handling;
+package pg.search.store.application.cqrs.user.command.avatar;
 
 import lombok.AllArgsConstructor;
 
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import pg.lib.cqrs.command.CommandHandler;
 
-import pg.search.store.application.cqrs.user.command.DeleteUserAvatarCommand;
 import pg.search.store.infrastructure.user.UserService;
 
 @Service

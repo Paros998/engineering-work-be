@@ -35,6 +35,8 @@ public interface UserService extends UserDetailsService {
 
     UserEntity createClient(RegisterClientData data);
 
+    void addProductToUserFollowed(UUID userId, UUID productId);
+
     void uploadUserAvatar(UUID userId, MultipartFile file);
 
     void updateUser(UserEntity user);
@@ -50,4 +52,6 @@ public interface UserService extends UserDetailsService {
     void deleteUserById(UUID userId);
 
     void deleteUserAvatar(UUID userId);
+
+    void removeProductFromUserFollowed(UUID userId, UUID productId);
 }

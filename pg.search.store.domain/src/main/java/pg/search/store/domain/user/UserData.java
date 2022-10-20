@@ -2,16 +2,20 @@ package pg.search.store.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
+import java.util.UUID;
+
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Builder
-public class UserCredentialsData {
+public class UserData {
+    private UUID userId;
     private String username;
-    private String password;
     private String email;
     private Roles role;
+    private Boolean isBlocked;
+    private String avatarFile;
 }

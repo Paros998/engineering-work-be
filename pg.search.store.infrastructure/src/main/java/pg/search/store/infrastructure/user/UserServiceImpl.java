@@ -1,6 +1,7 @@
 package pg.search.store.infrastructure.user;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
@@ -38,23 +39,23 @@ public class UserServiceImpl implements UserService {
     private final SettingsService settingsService;
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final @NonNull String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, username))
         );
     }
 
-    public UserEntity getUser(final UUID userId) {
+    public UserEntity getUser(final @NonNull UUID userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with given userId %s " + "doesn't exist!", userId))
         );
     }
 
-    public UserEntity getUser(final String username) {
+    public UserEntity getUser(final @NonNull String username) {
         return userRepository.getByUsername(username);
     }
 
-    public String getUserAvatar(final UUID userId) {
+    public String getUserAvatar(final @NonNull UUID userId) {
         FileEntity avatar = getUser(userId).getAvatar();
 
         if (avatar == null)
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         return fileService.getFileUrl(avatar.getFileId());
     }
 
-    public UserEntity getUserByEmail(final String email) {
+    public UserEntity getUserByEmail(final @NonNull String email) {
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with given email %s doesn't exist in " +
                         "database!", email))
@@ -74,11 +75,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    public SpringPageResponse<UserEntity> getUsers(final SpringPageRequest pageRequestDTO) {
+    public SpringPageResponse<UserEntity> getUsers(final @NonNull SpringPageRequest pageRequestDTO) {
         return new SpringPageResponse<>(userRepository.findAll(pageRequestDTO.getRequest(UserEntity.class)));
     }
 
-    public List<ProductEntity> getUserFollowedProducts(final UUID userId, final ProductType productType) {
+    public List<ProductEntity> getUserFollowedProducts(final @NonNull UUID userId, final ProductType productType) {
         UserEntity user = userRepository.getReferenceById(userId);
 
         if (productType == null)
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserService {
         return productRepository.findByProductIdInAndProductType(user.getFollowedProducts(), productType);
     }
 
-    public UserEntity createUser(final UserCredentialsData credentials) {
+    public UserEntity createUser(final @NonNull UserCredentialsData credentials) {
         checkForEmailDuplicates(credentials.getEmail());
 
         checkForUsernameDuplicates(credentials.getUsername());
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public UserEntity createClient(final RegisterClientData data) {
+    public UserEntity createClient(final @NonNull RegisterClientData data) {
         checkForEmailDuplicates(data.getEmail());
 
         checkForUsernameDuplicates(data.getUsername());
@@ -127,7 +128,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public void uploadUserAvatar(final UUID userId, final MultipartFile file) {
+    public void addProductToUserFollowed(final @NonNull UUID userId, final @NonNull UUID productId) {
+        final List<UUID> followedProducts = getUser(userId).getFollowedProducts();
+        followedProducts.add(productId);
+
+        userRepository.updateFollowedProductsByUserId(followedProducts, userId);
+    }
+
+    public void uploadUserAvatar(final @NonNull UUID userId, @NonNull final MultipartFile file) {
         UserEntity user = getUser(userId);
 
         UUID avatarId = fileService.uploadFile(file);
@@ -137,11 +145,11 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public void updateUser(final UserEntity user) {
+    public void updateUser(final @NonNull UserEntity user) {
         userRepository.save(user);
     }
 
-    public void changeUserPassword(final UUID userId, final ChangePasswordData data) {
+    public void changeUserPassword(final @NonNull UUID userId, final @NonNull ChangePasswordData data) {
         UserEntity user = getUser(userId);
 
         if (!bCryptPasswordEncoder.matches(data.getOldPassword(), user.getPassword()))
@@ -228,5 +236,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         fileService.deleteFile(avatar.getFileId());
+    }
+
+    public void removeProductFromUserFollowed(final UUID userId, final UUID productId) {
+        final List<UUID> followedProducts = getUser(userId).getFollowedProducts();
+
+        if (!followedProducts.remove(productId))
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "User with id: %s couldn't unfollow product: %s, because he didn't ".formatted(userId, productId) + "followed it");
+
+        userRepository.updateFollowedProductsByUserId(followedProducts, userId);
     }
 }
