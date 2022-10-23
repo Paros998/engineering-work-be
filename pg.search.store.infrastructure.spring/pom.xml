@@ -14,6 +14,10 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
@@ -67,6 +71,10 @@
         <dependency>
             <groupId>pg.search.store</groupId>
             <artifactId>pg.search.store.application</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>pg.search.store</groupId>
+            <artifactId>pg.search.store.domain</artifactId>
         </dependency>
 
         <dependency>

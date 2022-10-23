@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductMapperImpl implements ProductMapper {
     private final StoreOfferRepository offerRepository;
+    private final ProductService productService;
 
     public BasicProduct toBasicProduct(final ProductEntity product) {
         final List<StoreOfferEntity> offers = offerRepository.findByProductProductId(product.productId);
@@ -31,6 +32,7 @@ public class ProductMapperImpl implements ProductMapper {
                 .available(!offers.isEmpty())
                 .storesNumber(offers.size())
                 .storesLowestPrice(lowestPrice)
+                .productPhoto(productService.getProductPhoto(product))
                 .build();
     }
 }

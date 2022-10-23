@@ -32,23 +32,30 @@ public class SettingsEntity implements Serializable {
     )
     private UUID settingsId;
 
+    @Builder.Default
     private Boolean isNewCardAdded = false;
 
+    @Builder.Default
     @Column(name = "available")
     private Boolean hasFollowedProductBecomeAvailableOnline = false;
 
+    @Builder.Default
     @Column(name = "marked_available")
     private Boolean hasMarkedProductBecomeAvailableOnline = false;
 
+    @Builder.Default
     @Column(name = "new_review")
     private Boolean hasFollowedProductNewReview = false;
 
+    @Builder.Default
     @Column(name = "marked_new_review")
     private Boolean hasMarkedProductNewReview = false;
 
+    @Builder.Default
     @Column(name = "lower_price")
     private Boolean hasFollowedProductLowerPriceOffer = false;
 
+    @Builder.Default
     @Column(name = "marked_lower_price")
     private Boolean hasMarkedProductLowerPriceOffer = false;
 
@@ -57,8 +64,8 @@ public class SettingsEntity implements Serializable {
     @JsonIgnore
     private UserEntity user;
 
-    public static SettingsEntity of(UserEntity user) {
-        return SettingsEntity.builder().user(user).build();
+    public static SettingsEntity of(final UserEntity user) {
+        return new SettingsEntity().setUser(user);
     }
 
     public void update(final UserSettingsData data) {
@@ -69,6 +76,11 @@ public class SettingsEntity implements Serializable {
                 .setHasMarkedProductBecomeAvailableOnline(data.getHasMarkedProductBecomeAvailableOnline())
                 .setHasMarkedProductNewReview(data.getHasMarkedProductNewReview())
                 .setHasMarkedProductLowerPriceOffer(data.getHasMarkedProductLowerPriceOffer());
+    }
+
+    public SettingsEntity setUser(final UserEntity user) {
+        this.user = user;
+        return this;
     }
 
     private SettingsEntity setIsNewCardAdded(Boolean newCardAdded) {

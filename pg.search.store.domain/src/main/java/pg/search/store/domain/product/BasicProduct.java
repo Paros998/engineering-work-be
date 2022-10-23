@@ -22,4 +22,6 @@ public class BasicProduct {
     private Boolean available;
     private Integer storesNumber;
     private Double storesLowestPrice;
+
+    private String productPhoto;
 }

@@ -36,10 +36,14 @@ public class UserHttpEndpoint {
     private final ServiceExecutor serviceExecutor;
 
     @GetMapping
-    public PageResponse<UserData> getUsers(final @RequestParam Integer page, final @RequestParam Integer pageLimit,
-                                           final @RequestParam(required = false, defaultValue = "asc") String sortDir,
-                                           final @RequestParam(required = false, defaultValue = "title") String sortBy) {
-        return serviceExecutor.executeQuery(GetUsersQuery.of(PageMapper.toPageRequest(page, pageLimit, sortDir, sortBy)));
+    public PageResponse<UserData> getUsers(
+            final @RequestParam(required = false, defaultValue = "1") Integer page,
+            final @RequestParam(required = false, defaultValue = "10") Integer pageLimit,
+            final @RequestParam(required = false, defaultValue = "asc") String sortDir,
+            final @RequestParam(required = false, defaultValue = "username") String sortBy
+    ) {
+        final GetUsersQuery query = GetUsersQuery.of(PageMapper.toPageRequest(page, pageLimit, sortDir, sortBy));
+        return serviceExecutor.executeQuery(query);
     }
 
     @GetMapping("{userId}")

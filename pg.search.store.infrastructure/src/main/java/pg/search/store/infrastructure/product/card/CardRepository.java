@@ -4,5 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface GraphicCardRepository extends JpaRepository<GraphicCardEntity, UUID> {
+public interface CardRepository extends JpaRepository<CardEntity, UUID> {
+    boolean existsByTitle(String title);
 }

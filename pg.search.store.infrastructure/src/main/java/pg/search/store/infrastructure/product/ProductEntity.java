@@ -3,7 +3,6 @@ package pg.search.store.infrastructure.product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -22,10 +21,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public abstract class ProductEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,19 +32,23 @@ public abstract class ProductEntity implements Serializable {
             updatable = false
     )
     protected UUID productId;
+
     @Enumerated(EnumType.STRING)
     protected ProductType productType;
+
     protected String title;
-    private String producentCode;
+
+    protected String producentCode;
+
     @ManyToOne
     @JoinColumn(name = "file_id")
     @JsonBackReference
-    private FileEntity productPhoto;
+    protected FileEntity productPhoto;
 
     @Column(
             length = 2000
     )
-    private String producentSite;
+    protected String producentSite;
 
     @OneToMany(mappedBy = "product")
     @JsonManagedReference
@@ -55,4 +57,29 @@ public abstract class ProductEntity implements Serializable {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<ReviewEntity> reviews;
+
+    public ProductEntity setProductType(ProductType productType) {
+        this.productType = productType;
+        return this;
+    }
+
+    public ProductEntity setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public ProductEntity setProducentCode(String producentCode) {
+        this.producentCode = producentCode;
+        return this;
+    }
+
+    public ProductEntity setProductPhoto(FileEntity productPhoto) {
+        this.productPhoto = productPhoto;
+        return this;
+    }
+
+    public ProductEntity setProducentSite(String producentSite) {
+        this.producentSite = producentSite;
+        return this;
+    }
 }

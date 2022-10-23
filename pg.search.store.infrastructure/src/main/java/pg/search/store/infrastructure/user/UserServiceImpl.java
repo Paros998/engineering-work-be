@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pg.lib.awsfiles.entity.FileEntity;
 import pg.lib.awsfiles.service.FileService;
 
+import pg.search.store.domain.common.Files;
 import pg.search.store.domain.product.ProductType;
 import pg.search.store.domain.user.*;
 import pg.search.store.infrastructure.common.pageable.SpringPageRequest;
@@ -24,6 +25,7 @@ import pg.search.store.infrastructure.product.ProductRepository;
 import pg.search.store.infrastructure.user.settings.SettingsService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,7 +33,6 @@ import java.util.UUID;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND = "User with username %s not found";
-    private static final UUID BasicUserPhoto = UUID.fromString("ffffffff-ffff-eeee-ffff-ffffffffffff");
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
         FileEntity avatar = getUser(userId).getAvatar();
 
         if (avatar == null)
-            return fileService.getFileUrl(BasicUserPhoto);
+            return fileService.getFileUrl(Files.getDefaultUserPhoto());
 
         return fileService.getFileUrl(avatar.getFileId());
     }
@@ -121,7 +122,11 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        user.setAvatar(fileService.getFileById(data.getFileId()));
+        Optional<FileEntity> avatar = fileService.findById(data.getFileId());
+
+        if (avatar.isPresent())
+            user.setAvatar(avatar.get());
+        else user.setAvatar(fileService.getFileById(Files.getDefaultUserPhoto()));
 
         userRepository.save(user);
 
@@ -166,7 +171,7 @@ public class UserServiceImpl implements UserService {
     public void updateUser(final UUID userId, final UpdateUsernameEmailData userData) {
         UserEntity user = getUser(userId);
 
-        //TODO fix update
+        // TODO fix update
         if (!user.getEmail().equals(userData.getEmail().trim())) {
             checkForEmailDuplicates(userData.getEmail());
         }

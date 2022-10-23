@@ -17,6 +17,8 @@ public class GetUserByIdQueryHandler implements QueryHandler<GetUserByIdQuery, U
     private final UserMapper userMapper;
 
     public UserData handle(final GetUserByIdQuery query) {
-        return userMapper.toUserData(userService.getUser(query.getUserId()));
+        return userMapper.toUserData(
+                userService.getUser(query.getUserId())
+        );
     }
 }
