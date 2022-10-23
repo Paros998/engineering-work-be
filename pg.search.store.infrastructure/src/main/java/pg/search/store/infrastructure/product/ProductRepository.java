@@ -1,5 +1,7 @@
 package pg.search.store.infrastructure.product;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,4 +17,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, UUID> {
 
     @Query("select p from ProductEntity p where p.productId in ?1 and p.productType = ?2")
     List<ProductEntity> findByProductIdInAndProductType(Collection<UUID> productIds, ProductType productType);
+
+    @Query("select p from ProductEntity p where p.productType = ?1")
+    Page<ProductEntity> getProducts(ProductType productType, Pageable pageable);
 }

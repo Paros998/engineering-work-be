@@ -7,5 +7,5 @@ import pg.lib.cqrs.command.Command;
 import java.util.UUID;
 
 @AllArgsConstructor(staticName = "of")
-public class CreateCardCommand extends CardDataCommand implements Command<UUID> {
+public class EditCardCommand extends CardDataCommand implements Command<UUID> {
 }

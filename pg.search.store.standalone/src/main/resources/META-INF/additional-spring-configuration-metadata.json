@@ -1,0 +1,29 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Description for jwt.secret."
+    },
+    {
+      "name": "aws.access",
+      "type": "java.lang.String",
+      "description": "Description for aws.access."
+    },
+    {
+      "name": "aws.secret",
+      "type": "java.lang.String",
+      "description": "Description for aws.secret."
+    },
+    {
+      "name": "aws.bucket",
+      "type": "java.lang.String",
+      "description": "Description for aws.bucket."
+    },
+    {
+      "name": "aws.url",
+      "type": "java.lang.String",
+      "description": "Description for aws.url."
+    }
+  ]
+}

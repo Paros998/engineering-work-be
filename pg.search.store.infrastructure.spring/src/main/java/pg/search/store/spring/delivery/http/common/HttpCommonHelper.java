@@ -11,5 +11,10 @@ public class HttpCommonHelper {
 
     public static final String USER_PATH = BASE_PATH + "/users";
 
+    public static final String USER_AVATAR_PATH = USER_PATH + "/avatar";
+
     public static final String CARD_PATH = BASE_PATH + "/cards";
+
+    public static final String PRODUCT_PATH = BASE_PATH + "/products";
+    public static final String PRODUCT_PHOTO_PATH = PRODUCT_PATH + "/photo";
 }

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import pg.lib.awsfiles.entity.FileEntity;
+
+import pg.search.store.domain.product.ProductType;
 import pg.search.store.domain.product.card.MemoryType;
 import pg.search.store.domain.product.card.PciType;
 import pg.search.store.domain.product.card.Technology;
@@ -80,82 +83,112 @@ public class CardEntity extends ProductEntity {
         return cudaCoresAmount * (clock / 1000.00) * 2;
     }
 
-    public CardEntity setTechnology(Technology technology) {
+    @Override
+    public CardEntity setProductType(final ProductType productType) {
+        this.productType = productType;
+        return this;
+    }
+
+    @Override
+    public CardEntity setTitle(final String title) {
+        this.title = title;
+        return this;
+    }
+
+    @Override
+    public CardEntity setProducentCode(final String producentCode) {
+        this.producentCode = producentCode;
+        return this;
+    }
+
+    @Override
+    public CardEntity setProductPhoto(final FileEntity productPhoto) {
+        this.productPhoto = productPhoto;
+        return this;
+    }
+
+    @Override
+    public CardEntity setProducentSite(final String producentSite) {
+        this.producentSite = producentSite;
+        return this;
+    }
+
+    public CardEntity setTechnology(final Technology technology) {
         this.technology = technology;
         return this;
     }
 
-    public CardEntity setRtxSupport(Boolean rtxSupport) {
+    public CardEntity setRtxSupport(final Boolean rtxSupport) {
         this.rtxSupport = rtxSupport;
         return this;
     }
 
-    public CardEntity setSupportedLibraries(List<String> supportedLibraries) {
+    public CardEntity setSupportedLibraries(final List<String> supportedLibraries) {
         this.supportedLibraries = supportedLibraries;
         return this;
     }
 
-    public CardEntity setCudaCoresAmount(Integer cudaCoresAmount) {
+    public CardEntity setCudaCoresAmount(final Integer cudaCoresAmount) {
         this.cudaCoresAmount = cudaCoresAmount;
         return this;
     }
 
-    public CardEntity setPowerConsumption(Integer powerConsumption) {
+    public CardEntity setPowerConsumption(final Integer powerConsumption) {
         this.powerConsumption = powerConsumption;
         return this;
     }
 
-    public CardEntity setRecommendedPower(Integer recommendedPower) {
+    public CardEntity setRecommendedPower(final Integer recommendedPower) {
         this.recommendedPower = recommendedPower;
         return this;
     }
 
-    public CardEntity setCooling(String cooling) {
+    public CardEntity setCooling(final String cooling) {
         this.cooling = cooling;
         return this;
     }
 
-    public CardEntity setPowerConnector(String powerConnector) {
+    public CardEntity setPowerConnector(final String powerConnector) {
         this.powerConnector = powerConnector;
         return this;
     }
 
-    public CardEntity setCoreClock(Integer coreClock) {
+    public CardEntity setCoreClock(final Integer coreClock) {
         this.coreClock = coreClock;
         return this;
     }
 
-    public CardEntity setBoostCoreClock(Integer boostCoreClock) {
+    public CardEntity setBoostCoreClock(final Integer boostCoreClock) {
         this.boostCoreClock = boostCoreClock;
         return this;
     }
 
-    public CardEntity setMemoryAmount(Float memoryAmount) {
+    public CardEntity setMemoryAmount(final Float memoryAmount) {
         this.memoryAmount = memoryAmount;
         return this;
     }
 
-    public CardEntity setSupportedDirectX(Float supportedDirectX) {
+    public CardEntity setSupportedDirectX(final Float supportedDirectX) {
         this.supportedDirectX = supportedDirectX;
         return this;
     }
 
-    public CardEntity setTypeOfMemory(MemoryType typeOfMemory) {
+    public CardEntity setTypeOfMemory(final MemoryType typeOfMemory) {
         this.typeOfMemory = typeOfMemory;
         return this;
     }
 
-    public CardEntity setTypeOfPciConnector(PciType typeOfPciConnector) {
+    public CardEntity setTypeOfPciConnector(final PciType typeOfPciConnector) {
         this.typeOfPciConnector = typeOfPciConnector;
         return this;
     }
 
-    public CardEntity setMemoryClock(Integer memoryClock) {
+    public CardEntity setMemoryClock(final Integer memoryClock) {
         this.memoryClock = memoryClock;
         return this;
     }
 
-    public CardEntity setMemoryBus(Integer memoryBus) {
+    public CardEntity setMemoryBus(final Integer memoryBus) {
         this.memoryBus = memoryBus;
         return this;
     }

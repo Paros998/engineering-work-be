@@ -36,6 +36,9 @@ public abstract class ProductEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     protected ProductType productType;
 
+    @Column(
+            unique = true
+    )
     protected String title;
 
     protected String producentCode;

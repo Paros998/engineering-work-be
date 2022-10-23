@@ -114,6 +114,16 @@
                 <artifactId>jjwt-api</artifactId>
                 <version>${jwt-api-version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jwt-api-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jwt-api-version}</version>
+            </dependency>
 
         </dependencies>
 
