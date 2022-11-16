@@ -16,15 +16,17 @@ import pg.search.store.infrastructure.store.offer.StoreOfferEntity;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "products")
+@Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public abstract class ProductEntity implements Serializable {
+public abstract class ProductEntity implements Performable, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(
@@ -52,6 +54,7 @@ public abstract class ProductEntity implements Serializable {
             length = 2000
     )
     protected String producentSite;
+    protected LocalDate dateOfProduction;
 
     @OneToMany(mappedBy = "product")
     @JsonManagedReference
@@ -83,6 +86,11 @@ public abstract class ProductEntity implements Serializable {
 
     public ProductEntity setProducentSite(String producentSite) {
         this.producentSite = producentSite;
+        return this;
+    }
+
+    public ProductEntity setDateOfProduction(LocalDate dateOfProduction) {
+        this.dateOfProduction = dateOfProduction;
         return this;
     }
 }

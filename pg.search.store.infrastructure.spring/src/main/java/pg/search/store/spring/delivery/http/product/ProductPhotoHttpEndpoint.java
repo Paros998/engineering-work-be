@@ -12,7 +12,7 @@ import pg.lib.cqrs.service.ServiceExecutor;
 import pg.search.store.application.cqrs.product.command.photo.DeleteProductPhotoCommand;
 import pg.search.store.application.cqrs.product.command.photo.UpdateProductPhotoCommand;
 import pg.search.store.application.cqrs.product.command.photo.UploadProductPhotoCommand;
-import pg.search.store.application.cqrs.product.query.photo.GetProductPhotoQuery;
+import pg.search.store.application.cqrs.product.query.photo.ProductPhotoQuery;
 import pg.search.store.spring.delivery.http.common.HttpCommonHelper;
 
 import java.util.UUID;
@@ -26,7 +26,7 @@ public class ProductPhotoHttpEndpoint {
 
     @GetMapping("{productId}")
     public String getProductPhotoUrl(final @NonNull @PathVariable UUID productId) {
-        final var query = GetProductPhotoQuery.of(productId);
+        final var query = ProductPhotoQuery.of(productId);
         return serviceExecutor.executeQuery(query);
     }
 

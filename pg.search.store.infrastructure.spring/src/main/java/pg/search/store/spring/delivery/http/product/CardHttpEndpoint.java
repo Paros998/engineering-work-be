@@ -11,8 +11,8 @@ import pg.lib.cqrs.service.ServiceExecutor;
 import pg.search.store.application.cqrs.product.command.card.CreateCardCommand;
 import pg.search.store.application.cqrs.product.command.card.DeleteCardCommand;
 import pg.search.store.application.cqrs.product.command.card.EditCardCommand;
-import pg.search.store.application.cqrs.product.query.card.GetBasicCardQuery;
-import pg.search.store.application.cqrs.product.query.card.GetCardDataQuery;
+import pg.search.store.application.cqrs.product.query.card.BasicCardQuery;
+import pg.search.store.application.cqrs.product.query.card.CardDataQuery;
 import pg.search.store.domain.product.BasicProduct;
 import pg.search.store.domain.product.card.CardData;
 import pg.search.store.spring.delivery.http.common.HttpCommonHelper;
@@ -30,13 +30,13 @@ public class CardHttpEndpoint {
 
     @GetMapping("{cardId}")
     public CardData getCard(final @NonNull @PathVariable UUID cardId) {
-        final GetCardDataQuery query = GetCardDataQuery.of(cardId);
+        final CardDataQuery query = CardDataQuery.of(cardId);
         return serviceExecutor.executeQuery(query);
     }
 
     @GetMapping("{cardId}/basic")
-    public BasicProduct getBasicCard(final @NonNull @PathVariable UUID cardId) {
-        final GetBasicCardQuery query = GetBasicCardQuery.of(cardId);
+    public BasicProduct getBasicCard(final @NonNull @PathVariable UUID cardId, final @RequestParam(required = false) UUID userId) {
+        final BasicCardQuery query = BasicCardQuery.of(cardId, userId);
         return serviceExecutor.executeQuery(query);
     }
 

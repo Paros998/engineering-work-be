@@ -63,6 +63,7 @@ public class CardServiceImpl implements CardService {
                 .setTitle(data.getTitle())
                 .setProducentCode(data.getProducentCode())
                 .setProducentSite(data.getProducentSite())
+                .setDateOfProduction(data.getDateOfProduction())
                 .setTechnology(data.getTechnology())
                 .setRtxSupport(data.getRtxSupport())
                 .setSupportedLibraries(data.getSupportedLibraries())

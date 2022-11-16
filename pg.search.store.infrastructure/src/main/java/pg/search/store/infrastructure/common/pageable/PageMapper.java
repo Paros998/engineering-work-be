@@ -20,10 +20,17 @@ public class PageMapper {
         return new PageResponse<>(response.getCurrentPage(), response.getTotalPages(), response.getContent());
     }
 
-    public <T, R> PageResponse<R> toPageResponse(final @NonNull SpringPageResponse<T> response, @NonNull final Function<T, R> mapper) {
+    public <T, R> PageResponse<R> toPageResponse(final @NonNull SpringPageResponse<T> response, final @NonNull Function<T, R> mapper) {
         List<R> result = response.getContent().stream().map(mapper).toList();
 
         return new PageResponse<>(response.getCurrentPage(), response.getTotalPages(), result);
+    }
+
+    public <T, R> PageResponse<R> toPageResponse(final @NonNull SpringPageResponse<T> response, final @NonNull Function<T, R> mapper,
+                                                 final @NonNull String cacheMeta) {
+        List<R> result = response.getContent().stream().map(mapper).toList();
+
+        return new PageResponse<>(response.getCurrentPage(), response.getTotalPages(), result, cacheMeta);
     }
 
     public SpringPageRequest toSpringPageRequest(final @NonNull PageRequest request) {

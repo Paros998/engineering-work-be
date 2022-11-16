@@ -89,6 +89,24 @@ public class UserServiceImpl implements UserService {
         return productRepository.findByProductIdInAndProductType(user.getFollowedProducts(), productType);
     }
 
+    public Boolean isUserFollowingProduct(final UUID userId, final @NonNull UUID productId) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+
+        if (user.isEmpty())
+            return null;
+
+        return user.get().getFollowedProducts().contains(productId);
+    }
+
+    public Boolean hasUserMarkedProduct(final UUID userId, final @NonNull UUID productId) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+
+        if (user.isEmpty())
+            return null;
+
+        return user.get().getMarkedForBuyProducts().contains(productId);
+    }
+
     public UserEntity createUser(final @NonNull UserCredentialsData credentials) {
         checkForEmailDuplicates(credentials.getEmail());
 

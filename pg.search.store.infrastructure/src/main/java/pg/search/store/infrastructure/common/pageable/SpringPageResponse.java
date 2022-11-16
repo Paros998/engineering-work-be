@@ -1,6 +1,7 @@
 package pg.search.store.infrastructure.common.pageable;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Data
+@Builder
 public class SpringPageResponse<T> {
     private final Integer currentPage;
     private final Integer totalPages;

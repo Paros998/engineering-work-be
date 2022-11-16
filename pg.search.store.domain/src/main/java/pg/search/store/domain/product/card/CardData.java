@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import pg.search.store.domain.product.ProductType;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public class CardData implements Serializable {
     private String title;
     private String producentCode;
     private String producentSite;
+    private LocalDate dateOfProduction;
     private Technology technology;
     private Boolean rtxSupport;
     private List<String> supportedLibraries;

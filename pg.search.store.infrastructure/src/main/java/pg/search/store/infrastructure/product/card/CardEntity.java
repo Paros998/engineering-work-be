@@ -15,10 +15,11 @@ import pg.search.store.infrastructure.product.ProductEntity;
 
 import javax.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@SecondaryTable(name = "cards")
+@Table(name = "cards")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -113,6 +114,12 @@ public class CardEntity extends ProductEntity {
         return this;
     }
 
+    @Override
+    public CardEntity setDateOfProduction(final LocalDate dateOfProduction) {
+        this.dateOfProduction = dateOfProduction;
+        return this;
+    }
+
     public CardEntity setTechnology(final Technology technology) {
         this.technology = technology;
         return this;
@@ -191,5 +198,15 @@ public class CardEntity extends ProductEntity {
     public CardEntity setMemoryBus(final Integer memoryBus) {
         this.memoryBus = memoryBus;
         return this;
+    }
+
+    @Override
+    public Float getPeakPerformance(final Float base) {
+        return null;
+    }
+
+    @Override
+    public Float getAvgPerformance(final Float base) {
+        return null;
     }
 }

@@ -12,16 +12,16 @@ import java.util.UUID;
 @Builder
 @Data
 public class BasicProduct {
-    private UUID productId;
-    private String title;
-    private ProductType productType;
+    protected UUID productId;
+    protected String title;
+    protected ProductType productType;
 
-    private Boolean isFollowed;
-    private Boolean isMarked;
+    protected Boolean isFollowed;
+    protected Boolean isMarked;
 
-    private Boolean available;
-    private Integer storesNumber;
-    private Double storesLowestPrice;
+    protected Boolean available;
+    protected Integer storesNumber;
+    protected Double storesLowestPrice;
 
-    private String productPhoto;
+    protected String productPhoto;
 }

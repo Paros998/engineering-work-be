@@ -11,7 +11,7 @@ import pg.lib.cqrs.service.ServiceExecutor;
 import pg.search.store.application.cqrs.user.command.avatar.DeleteUserAvatarCommand;
 import pg.search.store.application.cqrs.user.command.avatar.UpdateUserAvatarCommand;
 import pg.search.store.application.cqrs.user.command.avatar.UploadUserAvatarCommand;
-import pg.search.store.application.cqrs.user.query.avatar.GetUserAvatarUrlQuery;
+import pg.search.store.application.cqrs.user.query.avatar.UserAvatarUrlQuery;
 import pg.search.store.spring.delivery.http.common.HttpCommonHelper;
 
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class UserAvatarHttpEndpoint {
 
     @GetMapping("{userId}")
     public String getUserAvatarUrl(final @PathVariable UUID userId) {
-        final GetUserAvatarUrlQuery avatarUrlQuery = GetUserAvatarUrlQuery.of(userId);
+        final UserAvatarUrlQuery avatarUrlQuery = UserAvatarUrlQuery.of(userId);
         return serviceExecutor.executeQuery(avatarUrlQuery);
     }
 

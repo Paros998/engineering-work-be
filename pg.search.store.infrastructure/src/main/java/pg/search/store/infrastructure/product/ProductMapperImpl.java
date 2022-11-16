@@ -1,27 +1,32 @@
 package pg.search.store.infrastructure.product;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 import org.springframework.stereotype.Service;
 
 import pg.search.store.domain.product.BasicProduct;
+import pg.search.store.domain.product.BasicProductWithPerformance;
 import pg.search.store.domain.product.card.CardData;
 import pg.search.store.infrastructure.product.card.CardEntity;
 import pg.search.store.infrastructure.store.offer.StoreOfferEntity;
 import pg.search.store.infrastructure.store.offer.StoreOfferRepository;
+import pg.search.store.infrastructure.user.UserService;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class ProductMapperImpl implements ProductMapper {
     private final StoreOfferRepository offerRepository;
     private final ProductService productService;
+    private final UserService userService;
 
-    // TODO add checking for user following and marked
-    public BasicProduct toBasicProduct(final ProductEntity product) {
-        final List<StoreOfferEntity> offers = offerRepository.findByProductProductId(product.productId);
+    public BasicProduct toBasicProduct(final @NonNull ProductEntity product, final UUID userId) {
+        final UUID productId = product.getProductId();
+        final List<StoreOfferEntity> offers = offerRepository.findByProductProductId(productId);
 
         final Double lowestPrice = offers.stream()
                 .min(Comparator.comparingDouble(StoreOfferEntity::getPrice))
@@ -29,14 +34,26 @@ public class ProductMapperImpl implements ProductMapper {
                 .orElse(0d);
 
         return BasicProduct.builder()
-                .productId(product.productId)
+                .productId(productId)
                 .title(product.getTitle())
                 .productType(product.productType)
                 .available(!offers.isEmpty())
                 .storesNumber(offers.size())
                 .storesLowestPrice(lowestPrice)
                 .productPhoto(productService.getProductPhoto(product))
+                .isFollowed(userService.isUserFollowingProduct(userId, productId))
+                .isMarked(userService.hasUserMarkedProduct(userId, productId))
                 .build();
+    }
+
+    public BasicProductWithPerformance toBasicProductWithPerformance(final @NonNull ProductEntity product, final UUID userId,
+                                                                     final Float peakPerformance, final Float baseAvgPerformance) {
+        final var basicProduct = (BasicProductWithPerformance) toBasicProduct(product, userId);
+
+        basicProduct.setAvgPerformance(product.getAvgPerformance(baseAvgPerformance))
+                .setPeakPerformance(product.getPeakPerformance(peakPerformance));
+
+        return basicProduct;
     }
 
     public CardData toCardData(final CardEntity card) {

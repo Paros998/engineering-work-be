@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import pg.lib.cqrs.service.ServiceExecutor;
 
 import pg.search.store.application.cqrs.user.command.settings.UpdateUserSettingsCommand;
-import pg.search.store.application.cqrs.user.query.notifications.GetUserNotificationsQuery;
-import pg.search.store.application.cqrs.user.query.settings.GetUserSettingsQuery;
+import pg.search.store.application.cqrs.user.query.notifications.UserNotificationsQuery;
+import pg.search.store.application.cqrs.user.query.settings.UserSettingsQuery;
 import pg.search.store.domain.notification.NotificationData;
 import pg.search.store.domain.user.UserSettingsData;
 import pg.search.store.spring.delivery.http.common.HttpCommonHelper;
@@ -29,12 +29,12 @@ public class UserCommonHttpEndpoint {
 
     @GetMapping("{userId}/settings")
     public UserSettingsData getUserSettings(final @PathVariable @NonNull UUID userId) {
-        return serviceExecutor.executeQuery(GetUserSettingsQuery.of(userId));
+        return serviceExecutor.executeQuery(UserSettingsQuery.of(userId));
     }
 
     @GetMapping("{userId}/notifications")
     public List<NotificationData> getUserNotifications(final @PathVariable @NonNull UUID userId) {
-        return serviceExecutor.executeQuery(GetUserNotificationsQuery.of(userId));
+        return serviceExecutor.executeQuery(UserNotificationsQuery.of(userId));
     }
 
     @PutMapping("{userId}/settings")

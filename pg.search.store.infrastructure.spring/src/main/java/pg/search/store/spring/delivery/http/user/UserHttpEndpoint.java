@@ -14,8 +14,8 @@ import pg.search.store.application.cqrs.user.command.RegisterClientCommand;
 import pg.search.store.application.cqrs.user.command.UpdateUserDataCommand;
 import pg.search.store.application.cqrs.user.command.auth.ChangeUserStateCommand;
 import pg.search.store.application.cqrs.user.command.auth.UpdateUserPasswordCommand;
-import pg.search.store.application.cqrs.user.query.GetUserByIdQuery;
-import pg.search.store.application.cqrs.user.query.GetUsersQuery;
+import pg.search.store.application.cqrs.user.query.UserByIdQuery;
+import pg.search.store.application.cqrs.user.query.UsersQuery;
 import pg.search.store.domain.common.PageResponse;
 import pg.search.store.domain.user.ChangePasswordData;
 import pg.search.store.domain.user.RegisterClientData;
@@ -42,13 +42,13 @@ public class UserHttpEndpoint {
             final @RequestParam(required = false, defaultValue = "asc") String sortDir,
             final @RequestParam(required = false, defaultValue = "username") String sortBy
     ) {
-        final GetUsersQuery query = GetUsersQuery.of(PageMapper.toPageRequest(page, pageLimit, sortDir, sortBy));
+        final UsersQuery query = UsersQuery.of(PageMapper.toPageRequest(page, pageLimit, sortDir, sortBy));
         return serviceExecutor.executeQuery(query);
     }
 
     @GetMapping("{userId}")
     public UserData getUserById(final @PathVariable @NonNull UUID userId) {
-        return serviceExecutor.executeQuery(GetUserByIdQuery.of(userId));
+        return serviceExecutor.executeQuery(UserByIdQuery.of(userId));
     }
 
     @PostMapping("CreateUserCommand")

@@ -31,6 +31,10 @@ public interface UserService extends UserDetailsService {
 
     List<ProductEntity> getUserFollowedProducts(UUID userId, ProductType productType);
 
+    Boolean isUserFollowingProduct(UUID userId, UUID productId);
+
+    Boolean hasUserMarkedProduct(UUID userId, UUID productId);
+
     UserEntity createUser(UserCredentialsData credentials);
 
     UserEntity createClient(RegisterClientData data);

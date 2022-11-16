@@ -10,7 +10,7 @@ import pg.lib.cqrs.service.ServiceExecutor;
 
 import pg.search.store.application.cqrs.product.command.RemoveProductFromUserFollowedCommand;
 import pg.search.store.application.cqrs.product.command.SaveFollowedProductToUserCommand;
-import pg.search.store.application.cqrs.product.query.GetUserFollowedProductsQuery;
+import pg.search.store.application.cqrs.product.query.UserFollowedProductsQuery;
 import pg.search.store.application.cqrs.user.query.UserFollowsProductQuery;
 import pg.search.store.domain.product.BasicProduct;
 
@@ -28,7 +28,7 @@ public class UserProductHttpEndpoint {
 
     @GetMapping("{userId}/followed-products")
     public List<BasicProduct> getUserFollowedProducts(final @PathVariable UUID userId) {
-        final GetUserFollowedProductsQuery query = GetUserFollowedProductsQuery.of(userId);
+        final UserFollowedProductsQuery query = UserFollowedProductsQuery.of(userId);
         return serviceExecutor.executeQuery(query);
     }
 

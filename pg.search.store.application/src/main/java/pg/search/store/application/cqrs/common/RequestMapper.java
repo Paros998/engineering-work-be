@@ -3,7 +3,7 @@ package pg.search.store.application.cqrs.common;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-import pg.search.store.application.cqrs.product.command.card.CardDataCommand;
+import pg.search.store.application.cqrs.product.command.card.AbstractCardCommand;
 import pg.search.store.application.cqrs.user.command.CreateUserCommand;
 import pg.search.store.domain.product.card.CardData;
 import pg.search.store.domain.product.card.MemoryType;
@@ -22,7 +22,7 @@ public class RequestMapper {
                 .build();
     }
 
-    public CardData toCardData(final @NonNull CardDataCommand command) {
+    public CardData toCardData(final @NonNull AbstractCardCommand command) {
         if (!Technology.isValidTechnology(command.getTechnology())) {
             command.setTechnology(Technology.NVIDIA.name());
         }
