@@ -31,7 +31,7 @@
 
         <pg-lib-cqrs-version>1.0.2</pg-lib-cqrs-version>
         <pg-lib-aws-version>1.0.2</pg-lib-aws-version>
-        <pg-lib-filters-version>1.0.0</pg-lib-filters-version>
+        <pg-lib-filters-version>1.0.1</pg-lib-filters-version>
 
         <kaczmarzyk-specification-version>2.6.3</kaczmarzyk-specification-version>
         <springdoc-openapi-version>1.6.11</springdoc-openapi-version>

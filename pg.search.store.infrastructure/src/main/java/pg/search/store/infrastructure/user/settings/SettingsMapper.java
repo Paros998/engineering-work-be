@@ -9,7 +9,7 @@ public class SettingsMapper {
     public UserSettingsData toUserSettingsData(final SettingsEntity entity) {
         return UserSettingsData.builder()
                 .hasFollowedProductNewReview(entity.getHasFollowedProductNewReview())
-                .isNewCardAdded(entity.getIsNewCardAdded())
+                .isNewProductAdded(entity.getIsNewProductAdded())
                 .hasMarkedProductNewReview(entity.getHasMarkedProductNewReview())
                 .hasMarkedProductBecomeAvailableOnline(entity.getHasMarkedProductBecomeAvailableOnline())
                 .hasMarkedProductLowerPriceOffer(entity.getHasMarkedProductLowerPriceOffer())

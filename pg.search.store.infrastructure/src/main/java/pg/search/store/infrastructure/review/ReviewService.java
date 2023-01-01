@@ -19,7 +19,7 @@ public interface ReviewService {
 
     Optional<ReviewEntity> getUserReview(UUID productId, UUID userId);
 
-    void saveReviewEntity(ReviewEntity review);
+    UUID saveReviewEntity(ReviewEntity review);
 
     void switchIsCensored(UUID reviewId);
 }

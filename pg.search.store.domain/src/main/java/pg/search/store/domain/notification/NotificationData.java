@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -17,7 +16,9 @@ public class NotificationData {
 
     private UUID productId;
 
-    private LocalDateTime notificationTime;
+    private String productType;
+
+    private String notificationTime;
 
     private String message;
 

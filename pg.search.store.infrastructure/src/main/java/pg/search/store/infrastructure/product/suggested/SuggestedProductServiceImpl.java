@@ -13,6 +13,7 @@ import pg.search.store.infrastructure.product.ProductRepository;
 
 import javax.annotation.PostConstruct;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -50,14 +51,16 @@ public class SuggestedProductServiceImpl implements SuggestedProductService {
         if (products.isEmpty())
             return;
 
-        final var chosenSuggestedProducts = products.stream()
-                .unordered()
+        Collections.shuffle(products);
+
+        final var chosenSuggestedProducts = products
+                .subList(0, (int) Math.ceil(products.size() / 5.0))
+                .stream()
                 .map(p -> SuggestedProductEntity.builder()
                         .productId(p.getProductId())
                         .productType(p.getProductType())
                         .build())
-                .toList()
-                .subList(0, (int) Math.ceil(products.size() / 5.0));
+                .toList();
 
         suggestedProductRepository.saveAll(chosenSuggestedProducts);
 

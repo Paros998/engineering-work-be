@@ -71,8 +71,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public void saveReviewEntity(final ReviewEntity review) {
-        reviewRepository.save(review);
+    public UUID saveReviewEntity(final ReviewEntity review) {
+        final var reviewEntity = reviewRepository.save(review);
+        return reviewEntity.getReviewId();
     }
 
     @Override

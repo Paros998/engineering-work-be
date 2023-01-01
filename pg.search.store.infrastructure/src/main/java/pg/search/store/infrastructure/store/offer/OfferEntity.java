@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreOfferEntity implements Serializable {
+public class OfferEntity implements Serializable {
     @Id
     @GeneratedValue(
             strategy = GenerationType.AUTO
@@ -41,6 +41,8 @@ public class StoreOfferEntity implements Serializable {
     private Boolean hasFreeShipping;
 
     private Double price;
+
+    private String currency;
 
     @ManyToOne
     @JoinColumn(name = "store_id")

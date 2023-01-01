@@ -33,7 +33,7 @@ public class SettingsEntity implements Serializable {
     private UUID settingsId;
 
     @Builder.Default
-    private Boolean isNewCardAdded = false;
+    private Boolean isNewProductAdded = false;
 
     @Builder.Default
     @Column(name = "available")
@@ -69,7 +69,7 @@ public class SettingsEntity implements Serializable {
     }
 
     public void update(final UserSettingsData data) {
-        this.setIsNewCardAdded(data.getIsNewCardAdded())
+        this.setIsNewProductAdded(data.getIsNewProductAdded())
                 .setHasFollowedProductBecomeAvailableOnline(data.getHasFollowedProductBecomeAvailableOnline())
                 .setHasFollowedProductLowerPriceOffer(data.getHasFollowedProductLowerPriceOffer())
                 .setHasFollowedProductNewReview(data.getHasFollowedProductNewReview())
@@ -83,8 +83,8 @@ public class SettingsEntity implements Serializable {
         return this;
     }
 
-    private SettingsEntity setIsNewCardAdded(Boolean newCardAdded) {
-        isNewCardAdded = newCardAdded;
+    private SettingsEntity setIsNewProductAdded(Boolean newCardAdded) {
+        isNewProductAdded = newCardAdded;
         return this;
     }
 

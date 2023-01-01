@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import pg.lib.awsfiles.entity.FileEntity;
 
 import pg.search.store.domain.product.ProductType;
@@ -12,6 +14,8 @@ import pg.search.store.domain.product.card.MemoryType;
 import pg.search.store.domain.product.card.PciType;
 import pg.search.store.domain.product.card.Technology;
 import pg.search.store.infrastructure.product.ProductEntity;
+import pg.search.store.infrastructure.product.laptop.LaptopEntity;
+import pg.search.store.infrastructure.product.pc.PcEntity;
 
 import javax.persistence.*;
 
@@ -25,6 +29,7 @@ import java.util.List;
 @Builder
 @Getter
 public class CardEntity extends ProductEntity {
+    private String cardModel;
     @Enumerated(EnumType.STRING)
     private Technology technology;
 
@@ -43,9 +48,9 @@ public class CardEntity extends ProductEntity {
 
     private String powerConnector;
 
-    private Integer coreClock;
+    private Float coreClock;
 
-    private Integer boostCoreClock;
+    private Float boostCoreClock;
 
     private Float memoryAmount;
 
@@ -57,31 +62,50 @@ public class CardEntity extends ProductEntity {
     @Enumerated(EnumType.STRING)
     private PciType typeOfPciConnector;
 
-    private Integer memoryClock;
+    private Float memoryClock;
 
     private Integer memoryBus;
 
-    @Transient
     private double memoryBandwidth;
-    @Transient
-    private double processingPower;
-    @Transient
-    private double boostProcessingPower;
 
-    public double getMemoryBandwidth() {
+    private Double processingPower;
+
+    private Double boostProcessingPower;
+
+    private Integer maxNumberOfUnitsInSLI;
+
+    @OneToMany(mappedBy = "gpuCard")
+    @JsonManagedReference
+    private List<PcEntity> usedInPcEntities;
+
+    @OneToMany(mappedBy = "gpuCard")
+    @JsonManagedReference
+    private List<LaptopEntity> usedInLaptopEntities;
+
+    @PrePersist
+    @PreUpdate
+    void calculatePerformance() {
+        if (memoryBus != null && memoryClock != null && typeOfMemory != null) {
+            this.memoryBandwidth = calculateMemoryBandwidth();
+        }
+        if (coreClock != null) this.processingPower = calculateProcessingPower();
+        if (boostCoreClock != null) this.boostProcessingPower = calculateBoostProcessingPower();
+    }
+
+    private double calculateMemoryBandwidth() {
         return memoryBus / 8.00 * memoryClock * typeOfMemory.getScale() / 1000.00;
     }
 
-    public double getProcessingPower() {
+    private double calculateProcessingPower() {
         return calculateTFlops(coreClock);
     }
 
-    public double getBoostProcessingPower() {
+    private double calculateBoostProcessingPower() {
         return calculateTFlops(boostCoreClock);
     }
 
-    private double calculateTFlops(Integer clock) {
-        return cudaCoresAmount * (clock / 1000.00) * 2;
+    private double calculateTFlops(Float clock) {
+        return cudaCoresAmount * clock * 2;
     }
 
     @Override
@@ -117,6 +141,11 @@ public class CardEntity extends ProductEntity {
     @Override
     public CardEntity setDateOfProduction(final LocalDate dateOfProduction) {
         this.dateOfProduction = dateOfProduction;
+        return this;
+    }
+
+    public CardEntity setCardModel(final String cardModel) {
+        this.cardModel = cardModel;
         return this;
     }
 
@@ -160,12 +189,12 @@ public class CardEntity extends ProductEntity {
         return this;
     }
 
-    public CardEntity setCoreClock(final Integer coreClock) {
+    public CardEntity setCoreClock(final Float coreClock) {
         this.coreClock = coreClock;
         return this;
     }
 
-    public CardEntity setBoostCoreClock(final Integer boostCoreClock) {
+    public CardEntity setBoostCoreClock(final Float boostCoreClock) {
         this.boostCoreClock = boostCoreClock;
         return this;
     }
@@ -190,7 +219,7 @@ public class CardEntity extends ProductEntity {
         return this;
     }
 
-    public CardEntity setMemoryClock(final Integer memoryClock) {
+    public CardEntity setMemoryClock(final Float memoryClock) {
         this.memoryClock = memoryClock;
         return this;
     }
@@ -200,13 +229,22 @@ public class CardEntity extends ProductEntity {
         return this;
     }
 
-    @Override
-    public Float getPeakPerformance(final Float base) {
-        return null;
+    public CardEntity setMaxNumberOfUnitsInSLI(final Integer maxNumberOfUnitsInSLI) {
+        this.maxNumberOfUnitsInSLI = maxNumberOfUnitsInSLI;
+        return this;
     }
 
     @Override
-    public Float getAvgPerformance(final Float base) {
-        return null;
+    public Double getPeakPerformance(final Double base) {
+        if (boostProcessingPower != null)
+            return (boostProcessingPower / base) * 100;
+        return 0.0;
+    }
+
+    @Override
+    public Double getAvgPerformance(final Double base) {
+        if (processingPower != null)
+            return (processingPower / base) * 100;
+        return 0.0;
     }
 }

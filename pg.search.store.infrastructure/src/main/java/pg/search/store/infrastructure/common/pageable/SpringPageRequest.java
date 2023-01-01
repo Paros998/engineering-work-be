@@ -8,8 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 @Data
 public class SpringPageRequest {
@@ -43,15 +46,22 @@ public class SpringPageRequest {
     }
 
     public <T> PageRequest getRequest(final Class<T> cls) {
+        List<Field> fields = Arrays.asList(cls.getDeclaredFields());
+        Class<?> superclass = cls.getSuperclass();
 
-        Field[] declaredFields = cls.getDeclaredFields();
+        List<Field> superFields = new ArrayList<>();
 
-        if (Arrays.stream(declaredFields).noneMatch(field -> field.getName().equals(sortBy))) {
+        if (superclass != null) {
+            superFields = Arrays.asList(superclass.getDeclaredFields());
+        }
+
+        Predicate<Field> fieldPredicate = field -> field.getName().equals(sortBy);
+
+        if (fields.stream().noneMatch(fieldPredicate) && superFields.stream().noneMatch(fieldPredicate)) {
 
             String[] clazzAndMember = sortBy.split("\\.", 2);
 
-
-            Class<?> clazz = Arrays.stream(declaredFields)
+            Class<?> clazz = fields.stream()
                     .filter(field -> field.getName().equals(clazzAndMember[0]))
                     .findFirst()
                     .orElseThrow(

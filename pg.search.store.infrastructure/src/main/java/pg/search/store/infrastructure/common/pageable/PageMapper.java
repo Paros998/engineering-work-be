@@ -27,7 +27,7 @@ public class PageMapper {
     }
 
     public <T, R> PageResponse<R> toPageResponse(final @NonNull SpringPageResponse<T> response, final @NonNull Function<T, R> mapper,
-                                                 final @NonNull String cacheMeta) {
+                                                 final String cacheMeta) {
         List<R> result = response.getContent().stream().map(mapper).toList();
 
         return new PageResponse<>(response.getCurrentPage(), response.getTotalPages(), result, cacheMeta);

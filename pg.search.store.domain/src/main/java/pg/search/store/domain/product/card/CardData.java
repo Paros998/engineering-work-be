@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import pg.search.store.domain.product.ProductType;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -20,10 +19,12 @@ import java.util.List;
 @Data
 public class CardData implements Serializable {
     public static final ProductType productType = ProductType.GPU;
+    private String cardModel;
     private String title;
     private String producentCode;
     private String producentSite;
-    private LocalDate dateOfProduction;
+    private String dateOfProduction;
+    private String productPhoto;
     private Technology technology;
     private Boolean rtxSupport;
     private List<String> supportedLibraries;
@@ -32,12 +33,13 @@ public class CardData implements Serializable {
     private Integer recommendedPower;
     private String cooling;
     private String powerConnector;
-    private Integer coreClock;
-    private Integer boostCoreClock;
+    private Float coreClock;
+    private Float boostCoreClock;
     private Float memoryAmount;
     private Float supportedDirectX;
     private MemoryType typeOfMemory;
     private PciType typeOfPciConnector;
-    private Integer memoryClock;
+    private Float memoryClock;
     private Integer memoryBus;
+    private Integer maxNumberOfUnitsInSLI;
 }

@@ -90,7 +90,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public Boolean isUserFollowingProduct(final UUID userId, final @NonNull UUID productId) {
-        Optional<UserEntity> user = userRepository.findById(userId);
+        Optional<UserEntity> user = Optional.empty();
+
+        if (userId != null)
+            user = userRepository.findById(userId);
 
         if (user.isEmpty())
             return null;
@@ -99,7 +102,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public Boolean hasUserMarkedProduct(final UUID userId, final @NonNull UUID productId) {
-        Optional<UserEntity> user = userRepository.findById(userId);
+        Optional<UserEntity> user = Optional.empty();
+
+        if (userId != null)
+            user = userRepository.findById(userId);
 
         if (user.isEmpty())
             return null;
@@ -152,10 +158,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public void addProductToUserFollowed(final @NonNull UUID userId, final @NonNull UUID productId) {
-        final List<UUID> followedProducts = getUser(userId).getFollowedProducts();
-        followedProducts.add(productId);
+        UserEntity user = getUser(userId);
+        user.getFollowedProducts().add(productId);
 
-        userRepository.updateFollowedProductsByUserId(followedProducts, userId);
+        userRepository.save(user);
     }
 
     public void uploadUserAvatar(final @NonNull UUID userId, @NonNull final MultipartFile file) {
@@ -170,6 +176,11 @@ public class UserServiceImpl implements UserService {
 
     public void updateUser(final @NonNull UserEntity user) {
         userRepository.save(user);
+    }
+
+    public void updateUserCurrency(final UUID userId, final String newCurrency) {
+        getUser(userId);
+        userRepository.updateCurrencyByUserId(newCurrency, userId);
     }
 
     public void changeUserPassword(final @NonNull UUID userId, final @NonNull ChangePasswordData data) {
@@ -226,7 +237,8 @@ public class UserServiceImpl implements UserService {
 
         user.setAvatar(null);
 
-        fileService.deleteFile(oldAvatar.getFileId());
+        if (oldAvatar != null)
+            fileService.deleteFile(oldAvatar.getFileId());
 
         user.setAvatar(fileService.getFileById(newAvatarId));
 
@@ -262,12 +274,15 @@ public class UserServiceImpl implements UserService {
     }
 
     public void removeProductFromUserFollowed(final UUID userId, final UUID productId) {
-        final List<UUID> followedProducts = getUser(userId).getFollowedProducts();
+        UserEntity user = getUser(userId);
+        final List<UUID> followedProducts = user.getFollowedProducts();
 
         if (!followedProducts.remove(productId))
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "User with id: %s couldn't unfollow product: %s, because he didn't ".formatted(userId, productId) + "followed it");
 
-        userRepository.updateFollowedProductsByUserId(followedProducts, userId);
+        user.setFollowedProducts(followedProducts);
+
+        userRepository.save(user);
     }
 }

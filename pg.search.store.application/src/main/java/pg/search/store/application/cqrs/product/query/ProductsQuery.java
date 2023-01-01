@@ -16,5 +16,6 @@ import java.util.UUID;
 public class ProductsQuery implements Query<PageResponse<BasicProduct>> {
     private final PageRequest pageRequest;
     private String productType;
+    private String searchQuery;
     private UUID userId;
 }

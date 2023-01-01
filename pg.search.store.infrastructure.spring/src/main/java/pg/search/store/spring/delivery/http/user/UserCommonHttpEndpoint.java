@@ -8,16 +8,14 @@ import org.springframework.web.bind.annotation.*;
 
 import pg.lib.cqrs.service.ServiceExecutor;
 
+import pg.search.store.application.cqrs.user.command.UpdateUserCurrencyCommand;
 import pg.search.store.application.cqrs.user.command.settings.UpdateUserSettingsCommand;
-import pg.search.store.application.cqrs.user.query.notifications.UserNotificationsQuery;
 import pg.search.store.application.cqrs.user.query.settings.UserSettingsQuery;
-import pg.search.store.domain.notification.NotificationData;
 import pg.search.store.domain.user.UserSettingsData;
 import pg.search.store.spring.delivery.http.common.HttpCommonHelper;
 
 import javax.validation.Valid;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,13 +30,13 @@ public class UserCommonHttpEndpoint {
         return serviceExecutor.executeQuery(UserSettingsQuery.of(userId));
     }
 
-    @GetMapping("{userId}/notifications")
-    public List<NotificationData> getUserNotifications(final @PathVariable @NonNull UUID userId) {
-        return serviceExecutor.executeQuery(UserNotificationsQuery.of(userId));
-    }
-
     @PutMapping("{userId}/settings")
     public void updateUserSettings(final @NonNull @PathVariable UUID userId, final @Valid @NonNull @RequestBody UserSettingsData newSettings) {
         serviceExecutor.executeCommand(UpdateUserSettingsCommand.of(userId, newSettings));
+    }
+
+    @PutMapping("{userId}/new-currency/{currency}")
+    public void updateUserSettings(final @NonNull @PathVariable UUID userId, final @NonNull @PathVariable String currency) {
+        serviceExecutor.executeCommand(UpdateUserCurrencyCommand.of(userId, currency));
     }
 }

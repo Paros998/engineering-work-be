@@ -1,7 +1,11 @@
 package pg.search.store.infrastructure.product;
 
 public interface Performable {
-    Float getPeakPerformance(Float base);
+    default Double getPeakPerformance(final Double base) {
+        return 100.0;
+    }
 
-    Float getAvgPerformance(Float base);
+    default Double getAvgPerformance(final Double base) {
+        return 100.0;
+    }
 }

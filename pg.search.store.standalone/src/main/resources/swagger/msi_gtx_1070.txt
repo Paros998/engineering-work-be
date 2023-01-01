@@ -1,0 +1,25 @@
+{
+  "title": "MSI GeForce GTX 1070 GAMING 8GB GDDR5",
+  "producentCode": "GTX 1070 GAMING 8G",
+  "producentSite": "https://www.msi.com/Graphics-Card/GEFORCE-GTX-1070-GAMING-X-8G/support",
+  "dateOfProduction": "16-03-2020",
+  "technology": "NVIDIA",
+  "rtxSupport": false,
+  "supportedLibraries": [
+    "DirectX 12","OpenGL 4.5"
+  ],
+  "cudaCoresAmount": 1920,
+  "powerConsumption": 150,
+  "recommendedPower": 500,
+  "cooling": "Active",
+  "powerConnector": "6-pin x 1, 8-pin x 1",
+  "coreClock": 1.582,
+  "boostCoreClock": 1.797,
+  "memoryAmount": 8,
+  "supportedDirectX": 12,
+  "typeOfMemory": "GDDR5",
+  "typeOfPciConnector": "PCI_3X16",
+  "memoryClock": 8.108,
+  "memoryBus": 256,
+  "maxNumberOfUnitsInSLI": 2
+}

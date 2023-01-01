@@ -18,4 +18,5 @@ public class UserData {
     private Roles role;
     private Boolean isBlocked;
     private String avatarFile;
+    private String currency;
 }

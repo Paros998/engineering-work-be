@@ -7,7 +7,8 @@ public enum ProductType {
     PC,
     LAPTOP,
     CONSOLE,
-    GPU;
+    GPU,
+    CPU;
 
     public static List<String> toList() {
         return Arrays.stream(ProductType.values()).map(ProductType::name).toList();

@@ -26,7 +26,7 @@ public class ProductsQueryHandler implements QueryHandler<ProductsQuery, PageRes
         if (ProductType.isValidType(productType))
             type = ProductType.valueOf(productType);
 
-        final var products = productService.getProducts(PageMapper.toSpringPageRequest(query.getPageRequest()), type);
+        final var products = productService.getProducts(PageMapper.toSpringPageRequest(query.getPageRequest()), type, query.getSearchQuery());
 
         return PageMapper.toPageResponse(products, product -> productMapper.toBasicProduct(product, query.getUserId()));
     }

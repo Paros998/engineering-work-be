@@ -1,9 +1,10 @@
 package pg.search.store.infrastructure.game;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import pg.lib.awsfiles.entity.FileEntity;
 
 import pg.search.store.domain.game.Platform;
 import pg.search.store.domain.system.OperatingSystem;
@@ -22,6 +23,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class GameEntity implements Serializable {
     @Id
     @GeneratedValue(
@@ -37,19 +39,33 @@ public class GameEntity implements Serializable {
 
     private LocalDate releaseDate;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    private String description;
+
+    @ElementCollection(fetch = FetchType.LAZY)
     private Map<Platform, Integer> scoreOnPlatforms;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @Enumerated(EnumType.STRING)
     private List<Platform> platforms;
 
-    private String requiredGraphicCard;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id")
+    @JsonManagedReference
+    private FileEntity file;
 
-    private String requiredCpu;
+    private String graphicRequirements;
+    private String processorRequirements;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> requiredGraphicCardModels;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> requiredProcessorModels;
 
     private Float requiredRam;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<OperatingSystem> supportedSystems;
+
+    private Float requiredSpace;
 }

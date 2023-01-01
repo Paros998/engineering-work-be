@@ -9,6 +9,8 @@ public class Files {
     private static UUID defaultUserPhoto;
     private static UUID defaultProductPhoto;
 
+    private static UUID defaultStorePhoto;
+
     public static UUID getDefaultUserPhoto() {
         return defaultUserPhoto;
     }
@@ -23,5 +25,13 @@ public class Files {
 
     public static void setDefaultProductPhoto(final UUID defaultProductPhoto) {
         Files.defaultProductPhoto = defaultProductPhoto;
+    }
+
+    public static UUID getDefaultStorePhoto() {
+        return defaultStorePhoto;
+    }
+
+    public static void setDefaultStorePhoto(final UUID defaultStorePhoto) {
+        Files.defaultStorePhoto = defaultStorePhoto;
     }
 }

@@ -37,16 +37,6 @@ public class ConsoleEntity extends ProductEntity {
     private Platform platform;
 
     @Override
-    public Float getPeakPerformance(final Float base) {
-        return 100.0f;
-    }
-
-    @Override
-    public Float getAvgPerformance(final Float base) {
-        return 100.0f;
-    }
-
-    @Override
     public ConsoleEntity setProductType(final ProductType productType) {
         this.productType = productType;
         return this;
@@ -79,6 +69,21 @@ public class ConsoleEntity extends ProductEntity {
     @Override
     public ConsoleEntity setDateOfProduction(final LocalDate dateOfProduction) {
         this.dateOfProduction = dateOfProduction;
+        return this;
+    }
+
+    public ConsoleEntity setProducer(final ConsoleProducer producer) {
+        this.producer = producer;
+        return this;
+    }
+
+    public ConsoleEntity setConsole(final Console console) {
+        this.console = console;
+        return this;
+    }
+
+    public ConsoleEntity setPlatform(final Platform platform) {
+        this.platform = platform;
         return this;
     }
 }

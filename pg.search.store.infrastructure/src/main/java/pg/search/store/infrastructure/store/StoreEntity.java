@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import pg.lib.awsfiles.entity.FileEntity;
 
-import pg.search.store.infrastructure.store.offer.StoreOfferEntity;
+import pg.search.store.infrastructure.store.offer.OfferEntity;
 
 import javax.persistence.*;
 
@@ -51,6 +51,6 @@ public class StoreEntity implements Serializable {
 
     @OneToMany(mappedBy = "store")
     @JsonManagedReference
-    private List<StoreOfferEntity> storeOfferList;
+    private List<OfferEntity> storeOfferList;
 
 }

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class Performance {
-    private Float peakPerformance;
-    private Float averagePerformance;
+    private Double peakPerformance;
+    private Double averagePerformance;
 }

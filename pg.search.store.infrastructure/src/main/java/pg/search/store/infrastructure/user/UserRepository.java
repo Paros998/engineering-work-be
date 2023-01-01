@@ -23,6 +23,39 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID>, JpaSpec
 
     @Transactional
     @Modifying
-    @Query("update UserEntity u set u.followedProducts = ?1 where u.userId = ?2")
-    void updateFollowedProductsByUserId(List<UUID> followedProduct, UUID userId);
+    @Query("update UserEntity u set u.currency = ?1 where u.userId = ?2")
+    void updateCurrencyByUserId(String currency, UUID userId);
+
+    @Query("select u from UserEntity u where u.enabled = true and u.userSettings.isNewProductAdded = true")
+    List<UserEntity> findActiveUsersWithNewProductSubscription();
+
+    @Query("""
+            select u from UserEntity u
+            where u.enabled = true and u.userSettings.hasFollowedProductNewReview = true and ?1 member u.followedProducts""")
+    List<UserEntity> findActiveUsersWithFollowedProductNewReviewSubscriptionThatFollow(UUID productId);
+
+    @Query("""
+            select u from UserEntity u
+            where u.enabled = true and u.userSettings.hasFollowedProductNewReview = true and ?1 member u.markedForBuyProducts""")
+    List<UserEntity> findActiveUsersWithMarkedProductNewReviewSubscriptionThatMarked(UUID productId);
+
+    @Query("""
+            select u from UserEntity u
+            where u.enabled = true and u.userSettings.hasFollowedProductBecomeAvailableOnline = true and ?1 member u.followedProducts""")
+    List<UserEntity> findActiveUsersWithFollowedProductAvailableSubscriptionThatFollow(UUID productId);
+
+    @Query("""
+            select u from UserEntity u
+            where u.enabled = true and u.userSettings.hasMarkedProductBecomeAvailableOnline = true and ?1 member u.markedForBuyProducts""")
+    List<UserEntity> findActiveUsersWithMarkedProductAvailableSubscriptionThatMarked(UUID productId);
+
+    @Query("""
+            select u from UserEntity u
+            where u.enabled = true and u.userSettings.hasFollowedProductLowerPriceOffer = true and ?1 member u.followedProducts""")
+    List<UserEntity> findActiveUsersWithFollowedProductLowerPriceOfferSubscriptionThatFollow(UUID productId);
+
+    @Query("""
+            select u from UserEntity u
+            where u.enabled = true and u.userSettings.hasMarkedProductLowerPriceOffer = true and ?1 member u.markedForBuyProducts""")
+    List<UserEntity> findActiveUsersWithMarkedProductLowerPriceOfferSubscriptionThatMarked(UUID productId);
 }

@@ -13,6 +13,8 @@ import pg.lib.awsfiles.entity.FileEntity;
 
 import pg.search.store.domain.user.Roles;
 import pg.search.store.domain.user.UserCredentialsData;
+import pg.search.store.infrastructure.common.currency.CurrencyProvider;
+import pg.search.store.infrastructure.history.HistoryEntity;
 import pg.search.store.infrastructure.notification.NotificationEntity;
 import pg.search.store.infrastructure.review.ReviewEntity;
 import pg.search.store.infrastructure.user.settings.SettingsEntity;
@@ -49,6 +51,8 @@ public class UserEntity implements UserDetails {
 
     private Boolean enabled;
 
+    private String currency;
+
     @ManyToOne
     @JoinColumn(name = "file_id")
     @JsonManagedReference
@@ -66,6 +70,10 @@ public class UserEntity implements UserDetails {
     @JsonManagedReference
     private List<ReviewEntity> reviews;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<HistoryEntity> userHistory;
+
     @ElementCollection(fetch = FetchType.LAZY, targetClass = UUID.class)
     private List<UUID> followedProducts;
 
@@ -81,6 +89,7 @@ public class UserEntity implements UserDetails {
         this.role = credentials.getRole();
         this.locked = locked;
         this.enabled = enabled;
+        this.currency = CurrencyProvider.DEFAULT_CURRENCY;
     }
 
     public UserEntity() {

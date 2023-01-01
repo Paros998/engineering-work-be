@@ -11,7 +11,7 @@ import pg.lib.awsfiles.entity.FileEntity;
 
 import pg.search.store.domain.product.ProductType;
 import pg.search.store.infrastructure.review.ReviewEntity;
-import pg.search.store.infrastructure.store.offer.StoreOfferEntity;
+import pg.search.store.infrastructure.store.offer.OfferEntity;
 
 import javax.persistence.*;
 
@@ -58,7 +58,7 @@ public abstract class ProductEntity implements Performable, Serializable {
 
     @OneToMany(mappedBy = "product")
     @JsonManagedReference
-    private List<StoreOfferEntity> onlineOfferList;
+    private List<OfferEntity> onlineOfferList;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonManagedReference

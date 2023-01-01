@@ -45,6 +45,8 @@ public class AwsFilesRunner implements ApplicationRunner {
                 Files.setDefaultProductPhoto(fileService.initFile(multipartFile));
             } else if (multipartFile.getName().contains("user_avatar")) {
                 Files.setDefaultUserPhoto(fileService.initFile(multipartFile));
+            } else if (multipartFile.getName().contains("no_image")) {
+                Files.setDefaultStorePhoto(fileService.initFile(multipartFile));
             } else {
                 fileService.uploadFile(multipartFile);
             }

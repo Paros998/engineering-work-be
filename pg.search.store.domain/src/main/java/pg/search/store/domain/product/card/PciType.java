@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum PciType {
+    PCI_2X16,
     PCI_3X16,
     PCI_4X16;
 

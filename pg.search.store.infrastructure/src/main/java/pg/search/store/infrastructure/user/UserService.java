@@ -45,6 +45,8 @@ public interface UserService extends UserDetailsService {
 
     void updateUser(UserEntity user);
 
+    void updateUserCurrency(UUID userId, String newCurrency);
+
     void changeUserPassword(UUID userId, ChangePasswordData changePasswordData);
 
     void updateUser(UUID userId, UpdateUsernameEmailData userData);

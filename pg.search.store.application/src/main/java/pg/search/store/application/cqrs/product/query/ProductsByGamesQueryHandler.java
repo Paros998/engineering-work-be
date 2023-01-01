@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import pg.lib.cqrs.query.QueryHandler;
 
@@ -18,35 +19,47 @@ import pg.search.store.infrastructure.product.ProductMapper;
 import pg.search.store.infrastructure.product.ProductService;
 import pg.search.store.infrastructure.product.filters.ResolvedFilter;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.PostConstruct;
+
+import java.util.Collections;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ProductsByGamesQueryHandler implements QueryHandler<ProductsByGamesQuery, PageResponse<BasicProductWithPerformance>> {
     private final CacheManager cacheManager;
-    final Cache filterCache = cacheManager.getCache("filters");
-    final Cache performanceCache = cacheManager.getCache("performances");
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private Cache filterCache;
+    private Cache performanceCache;
+
+    @PostConstruct
+    void init() {
+        filterCache = cacheManager.getCache("filters");
+        performanceCache = cacheManager.getCache("performances");
+    }
 
     public PageResponse<BasicProductWithPerformance> handle(final ProductsByGamesQuery query) {
         final String queryMeta = query.getCacheMeta() != null ? query.getCacheMeta() : "ProductsByGamesQuery-" + UUID.randomUUID();
 
-        final var filter = initFilter(query, queryMeta);
+        ResolvedFilter filter;
+        try {
+            filter = initFilter(query, queryMeta);
+        } catch (ResponseStatusException e) {
+            if (Objects.equals(e.getMessage(), "No Matches"))
+                return new PageResponse<>(1, 1, Collections.emptyList(), null);
+            else throw e;
+        }
 
-        final var performanceMap = initPerformanceMap(query, queryMeta);
+        final var performance = initPerformance(query, queryMeta);
 
-        SpringPageResponse<ProductEntity> products = productService.queryData(filter);
+        SpringPageResponse<ProductEntity> products = productService.queryData(filter, PageMapper.toSpringPageRequest(query.getRequest()));
 
         return PageMapper.toPageResponse(
                 products,
-                (product -> {
-                    Performance performance = performanceMap.get(product.getClass());
-                    return productMapper.toBasicProductWithPerformance(product, query.getUserId(), performance.getPeakPerformance(),
-                            performance.getAveragePerformance());
-                }),
+                (product -> productMapper.toBasicProductWithPerformance(product, query.getUserId(), performance.getPeakPerformance(),
+                        performance.getAveragePerformance())),
                 queryMeta
         );
     }
@@ -65,19 +78,18 @@ public class ProductsByGamesQueryHandler implements QueryHandler<ProductsByGames
         return filter;
     }
 
-    @SuppressWarnings("unchecked")
-    private Map<Class<? extends ProductEntity>, Performance> initPerformanceMap(final ProductsByGamesQuery query, final String queryMeta) {
-        Map<Class<? extends ProductEntity>, Performance> performanceMap = new HashMap<>();
+    private Performance initPerformance(final ProductsByGamesQuery query, final String queryMeta) {
+        Performance performance = null;
 
         if (query.getCacheMeta() != null && performanceCache != null) {
-            performanceMap = performanceCache.get(query.getCacheMeta(), performanceMap.getClass());
+            performance = performanceCache.get(query.getCacheMeta(), Performance.class);
         }
 
-        if (performanceMap == null) {
-            performanceMap = productService.resolveTargetGamesPerformance(query.getFilter(), queryMeta);
+        if (performance == null) {
+            performance = productService.resolveTargetGamesPerformance(query.getFilter(), queryMeta);
         }
 
-        return performanceMap;
+        return performance;
     }
 
 }

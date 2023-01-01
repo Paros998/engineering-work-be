@@ -13,6 +13,8 @@ public abstract class AbstractCardCommand {
     protected String title;
     protected String producentCode;
     protected String producentSite;
+    protected String dateOfProduction;
+    protected String cardModel;
     protected String technology;
     protected Boolean rtxSupport;
     protected List<String> supportedLibraries;
@@ -21,12 +23,13 @@ public abstract class AbstractCardCommand {
     protected Integer recommendedPower;
     protected String cooling;
     protected String powerConnector;
-    protected Integer coreClock;
-    protected Integer boostCoreClock;
+    protected Float coreClock;
+    protected Float boostCoreClock;
     protected Float memoryAmount;
     protected Float supportedDirectX;
     protected String typeOfMemory;
     protected String typeOfPciConnector;
-    protected Integer memoryClock;
+    protected Float memoryClock;
     protected Integer memoryBus;
+    protected Integer maxNumberOfUnitsInSLI;
 }

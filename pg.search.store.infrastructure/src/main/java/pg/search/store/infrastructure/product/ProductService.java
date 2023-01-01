@@ -10,11 +10,10 @@ import pg.search.store.infrastructure.common.pageable.SpringPageResponse;
 import pg.search.store.infrastructure.product.filters.ResolvedFilter;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public interface ProductService {
-    SpringPageResponse<ProductEntity> getProducts(SpringPageRequest request, ProductType productType);
+    SpringPageResponse<ProductEntity> getProducts(SpringPageRequest request, ProductType productType, String query);
 
     List<ProductEntity> getProductsByIds(List<UUID> products);
 
@@ -32,7 +31,9 @@ public interface ProductService {
 
     ResolvedFilter resolveFilter(GamesFilter filter, String queryMeta);
 
-    Map<Class<? extends ProductEntity>, Performance> resolveTargetGamesPerformance(GamesFilter filter, String queryMeta);
+    Performance resolveTargetGamesPerformance(GamesFilter filter, String queryMeta);
 
-    SpringPageResponse<ProductEntity> queryData(ResolvedFilter filter);
+    SpringPageResponse<ProductEntity> queryData(ResolvedFilter filter, SpringPageRequest request);
+
+    boolean existsById(UUID productId);
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class UserSettingsData {
-    private Boolean isNewCardAdded;
+    private Boolean isNewProductAdded;
     private Boolean hasFollowedProductBecomeAvailableOnline;
     private Boolean hasMarkedProductBecomeAvailableOnline;
     private Boolean hasFollowedProductNewReview;

@@ -20,7 +20,4 @@ public class ProductsByGamesQuery implements Query<PageResponse<BasicProductWith
     private UUID userId;
     private String cacheMeta;
 
-
 }
-
-

@@ -23,6 +23,7 @@ public class UserMapper {
                 .username(userEntity.getUsername())
                 .isBlocked(!userEntity.isEnabled())
                 .avatarFile(userService.getUserAvatar(userId))
+                .currency(userEntity.getCurrency())
                 .build();
     }
 }
