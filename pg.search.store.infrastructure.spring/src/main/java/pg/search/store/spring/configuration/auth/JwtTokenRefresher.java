@@ -19,6 +19,7 @@ import pg.search.store.infrastructure.user.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class JwtTokenRefresher {
         this.secretKey = secretKey;
     }
 
-    public void refreshToken(final HttpServletRequest request, final HttpServletResponse response) {
+    public void attemptRefreshToken(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader("Authorization-Refresh");
 
         if (!Strings.isNullOrEmpty(authorizationHeader) && authorizationHeader.startsWith(AUTH_BEARER + " ")) {
@@ -67,15 +68,13 @@ public class JwtTokenRefresher {
                         .compact();
 
                 response.addHeader("Authorization", AUTH_BEARER + " " + accessToken);
-                response.setStatus(HttpStatus.OK.value());
+                response.setStatus(299);
 
             } catch (final Exception e) {
-                if (e.getClass().equals(ExpiredJwtException.class))
-                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format("Token %s has expired, please login again", token));
-
-                if (e.getClass().equals(SignatureException.class))
+                if (e.getClass().equals(ExpiredJwtException.class)) {
+                    response.setStatus(499, String.format("Token %s has expired, please login again", token));
+                } else if (e.getClass().equals(SignatureException.class))
                     throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
-
                 else throw e;
             }
         } else

@@ -84,6 +84,7 @@ public class RequestMapper {
                 .typeOfMemory(MemoryType.valueOf(command.getTypeOfMemory()))
                 .typeOfPciConnector(PciType.valueOf(command.getTypeOfPciConnector()))
                 .maxNumberOfUnitsInSLI(command.getMaxNumberOfUnitsInSLI() >= 1 ? command.getMaxNumberOfUnitsInSLI() : 1)
+                .bitcoinHashRate(command.getBitcoinHashRate())
                 .build();
     }
 
@@ -110,6 +111,7 @@ public class RequestMapper {
                 .cores(command.getCores())
                 .threads(command.getThreads())
                 .instructionsPerCycle(command.getInstructionsPerCycle())
+                .onlyLaptopCpu(command.isOnlyLaptopCpu())
                 .build();
     }
 

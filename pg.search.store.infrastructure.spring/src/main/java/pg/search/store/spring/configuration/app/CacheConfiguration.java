@@ -21,13 +21,19 @@ public class CacheConfiguration {
 
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("filters", "performances");
+        return new ConcurrentMapCacheManager("filters",
+                "performances", "currency", "cryptoCurrency");
     }
 
-    // TODO implement own cache with proper eviction per object
     @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 8)
     public void clearCache() {
         Objects.requireNonNull(cacheManager.getCache("filters")).clear();
         Objects.requireNonNull(cacheManager.getCache("performances")).clear();
+    }
+
+    @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 8)
+    public void clearCryptoCache() {
+        Objects.requireNonNull(cacheManager.getCache("currency")).clear();
+        Objects.requireNonNull(cacheManager.getCache("cryptoCurrency")).clear();
     }
 }

@@ -36,8 +36,8 @@
         <kaczmarzyk-specification-version>2.6.3</kaczmarzyk-specification-version>
         <springdoc-openapi-version>1.6.11</springdoc-openapi-version>
         <jwt-api-version>0.11.5</jwt-api-version>
+        <ok-http-client-version>3.14.9</ok-http-client-version>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
@@ -129,6 +129,11 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jwt-api-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${ok-http-client-version}</version>
             </dependency>
 
         </dependencies>

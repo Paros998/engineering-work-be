@@ -45,4 +45,6 @@ public class AddCpuCommand implements Command<UUID> {
     private Integer threads;
 
     private Integer instructionsPerCycle;
+
+    private boolean onlyLaptopCpu;
 }

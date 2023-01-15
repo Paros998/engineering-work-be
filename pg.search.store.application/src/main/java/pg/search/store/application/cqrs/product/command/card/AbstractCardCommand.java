@@ -32,4 +32,5 @@ public abstract class AbstractCardCommand {
     protected Float memoryClock;
     protected Integer memoryBus;
     protected Integer maxNumberOfUnitsInSLI;
+    protected Float bitcoinHashRate;
 }

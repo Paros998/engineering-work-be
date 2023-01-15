@@ -108,6 +108,7 @@ public class ProductMapperImpl implements ProductMapper {
                 .memoryClock(card.getMemoryClock())
                 .memoryBus(card.getMemoryBus())
                 .maxNumberOfUnitsInSLI(card.getMaxNumberOfUnitsInSLI())
+                .bitcoinHashRate(card.getBitcoinHashRate())
                 .build();
     }
 
@@ -131,6 +132,7 @@ public class ProductMapperImpl implements ProductMapper {
                 .cores(cpu.getCores())
                 .threads(cpu.getThreads())
                 .instructionsPerCycle(cpu.getInstructionsPerCycle())
+                .onlyLaptopCpu(cpu.isOnlyLaptopCpu())
                 .build();
     }
 
@@ -165,6 +167,7 @@ public class ProductMapperImpl implements ProductMapper {
                 .build();
 
         return PcData.builder()
+                .productId(pc.getProductId())
                 .title(pc.getTitle())
                 .producentCode(pc.getProducentCode())
                 .producentSite(pc.getProducentSite())

@@ -57,7 +57,7 @@ public class NotificationMapper {
                 .notificationTime(LocalDateTime.now())
                 .isRead(false)
                 .message(String.format("Product %s:%s that you %s has acquired an offer and become available", productEntity.getTitle(),
-                        productEntity.getProductType(), newReviewType.equals(NotificationType.FOLLOWED_NEW_REVIEW) ? "follow" : "marked"))
+                        productEntity.getProductType(), newReviewType.equals(NotificationType.FOLLOWED_AVAILABLE) ? "follow" : "marked"))
                 .product(productEntity)
                 .type(newReviewType)
                 .user(userEntity)

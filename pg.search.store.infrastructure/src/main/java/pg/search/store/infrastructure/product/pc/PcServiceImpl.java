@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import pg.search.store.domain.product.cpu.CpuData;
 import pg.search.store.domain.product.pc.PcData;
 import pg.search.store.infrastructure.common.CommonData;
 import pg.search.store.infrastructure.common.exception.EntityNotFoundException;
@@ -41,7 +40,7 @@ public class PcServiceImpl implements PcService {
         PcEntity pcEntity = new PcEntity();
 
         return pcEntity
-                .setProductType(CpuData.productType)
+                .setProductType(PcData.productType)
                 .setTitle(data.getTitle())
                 .setProducentCode(data.getProducentCode())
                 .setProducentSite(data.getProducentSite())

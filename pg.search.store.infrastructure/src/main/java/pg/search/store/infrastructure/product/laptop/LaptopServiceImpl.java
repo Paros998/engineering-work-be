@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import pg.search.store.domain.product.cpu.CpuData;
 import pg.search.store.domain.product.laptop.LaptopData;
 import pg.search.store.infrastructure.common.CommonData;
 import pg.search.store.infrastructure.common.exception.EntityNotFoundException;
@@ -41,7 +40,7 @@ public class LaptopServiceImpl implements LaptopService {
         LaptopEntity laptopEntity = new LaptopEntity();
 
         return laptopEntity
-                .setProductType(CpuData.productType)
+                .setProductType(LaptopData.productType)
                 .setTitle(data.getTitle())
                 .setProducentCode(data.getProducentCode())
                 .setProducentSite(data.getProducentSite())

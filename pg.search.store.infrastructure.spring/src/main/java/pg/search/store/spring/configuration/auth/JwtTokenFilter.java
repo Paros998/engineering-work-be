@@ -9,7 +9,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.assertj.core.util.Strings;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +30,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final String secretKey;
+    private final JwtTokenRefresher tokenRefresher;
 
     @Override
     protected void doFilterInternal(final @NonNull HttpServletRequest request,
@@ -62,9 +62,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (final Exception e) {
-                if (e.getClass().equals(ExpiredJwtException.class))
-                    response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
-                else
+                if (e.getClass().equals(ExpiredJwtException.class)) {
+                    tokenRefresher.attemptRefreshToken(request, response);
+                } else
                     throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
             }
         }

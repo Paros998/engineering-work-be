@@ -9,6 +9,10 @@ public class HttpCommonHelper {
 
     public static final String AUTH_PATH = BASE_PATH + "/auth";
 
+    public static final String CRYPTO_PATH = BASE_PATH + "/crypto-currencies";
+
+    public static final String BITCOIN_PATH = CRYPTO_PATH + "/bitcoin";
+
     public static final String COMMON_DATA_PATH = BASE_PATH + "/common-data";
 
     public static final String USER_PATH = BASE_PATH + "/users";

@@ -106,6 +106,16 @@ public class LaptopEntity extends ProductEntity {
 
     private String weight;
 
+    private Float totalSpaceAvailable;
+
+    @PrePersist
+    @PreUpdate
+    void calculateFreeSpace() {
+        totalSpaceAvailable = 0.0f;
+        hddDrives.forEach((disk, space) -> totalSpaceAvailable += space);
+        ssdDrives.forEach((disk, space) -> totalSpaceAvailable += space);
+    }
+
     @Override
     public Double getPeakPerformance(Double base) {
         return ((cpu.getBoostPerformance() + gpuCard.getBoostProcessingPower()) / 2) / base * 100;

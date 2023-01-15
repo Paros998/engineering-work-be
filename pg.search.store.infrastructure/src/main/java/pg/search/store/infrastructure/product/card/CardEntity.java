@@ -74,6 +74,8 @@ public class CardEntity extends ProductEntity {
 
     private Integer maxNumberOfUnitsInSLI;
 
+    private Float bitcoinHashRate;
+
     @OneToMany(mappedBy = "gpuCard")
     @JsonManagedReference
     private List<PcEntity> usedInPcEntities;
@@ -231,6 +233,11 @@ public class CardEntity extends ProductEntity {
 
     public CardEntity setMaxNumberOfUnitsInSLI(final Integer maxNumberOfUnitsInSLI) {
         this.maxNumberOfUnitsInSLI = maxNumberOfUnitsInSLI;
+        return this;
+    }
+
+    public CardEntity setBitcoinHashRate(final Float bitcoinHashRate) {
+        this.bitcoinHashRate = bitcoinHashRate;
         return this;
     }
 

@@ -42,4 +42,5 @@ public class CardData implements Serializable {
     private Float memoryClock;
     private Integer memoryBus;
     private Integer maxNumberOfUnitsInSLI;
+    private Float bitcoinHashRate;
 }

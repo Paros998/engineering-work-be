@@ -32,7 +32,6 @@ import java.util.*;
 public class FilterResolverImpl implements FilterResolver {
     private final CardRepository cardRepository;
     private final GameRepository gameRepository;
-
     private final CpuRepository cpuRepository;
 
     private Map<JunctionType, List<Criteria>> filter;
@@ -139,6 +138,15 @@ public class FilterResolverImpl implements FilterResolver {
         if (matchingCpus.isEmpty())
             throw new ResponseStatusException(HttpStatus.OK, "No Matches");
 
+        filter.put(JunctionType.OR, List.of(
+                Criteria.builder()
+                        .operation(Operation.IS_FALSE)
+                        .key("onlyLaptopCpu")
+                        .build())
+        );
+
+        SpecificationBuilder onlyStandaloneProcessor = SpecificationBuilder.of(Combiner.AND, filter);
+
         Pair<Optional<Double>, Optional<Double>> cpuPerformanceData = getCpuPerformanceData(matchingCpus);
 
         final Optional<Double> performance = cpuPerformanceData.getFirst();
@@ -160,7 +168,7 @@ public class FilterResolverImpl implements FilterResolver {
 
         filter.put(JunctionType.OR, criteria);
 
-        return List.of(SpecificationBuilder.of(Combiner.AND, filter));
+        return List.of(onlyStandaloneProcessor, SpecificationBuilder.of(Combiner.AND, filter));
     }
 
     private List<CpuEntity> getMatchingCpus(final List<GameEntity> games) {
@@ -192,7 +200,7 @@ public class FilterResolverImpl implements FilterResolver {
     }
 
     private Optional<Float> getRequiredRam(final List<GameEntity> games) {
-        return games.stream().max(Comparator.comparing(GameEntity::getRequiredRam)).map(GameEntity::getRequiredRam);
+        return Optional.of((float) games.stream().mapToDouble(GameEntity::getRequiredRam).max().orElse(0));
     }
 
     private List<GameEntity> getGamesByTitles(final List<String> games) {
@@ -200,7 +208,7 @@ public class FilterResolverImpl implements FilterResolver {
     }
 
     private Optional<Float> getRequiredSpace(final List<GameEntity> games) {
-        return games.stream().max(Comparator.comparing(GameEntity::getRequiredSpace)).map(GameEntity::getRequiredSpace);
+        return Optional.of(25.f + (float) games.stream().mapToDouble(GameEntity::getRequiredSpace).sum());
     }
 
     private List<OperatingSystem> getRequiredSystems(final List<GameEntity> games) {
@@ -296,27 +304,20 @@ public class FilterResolverImpl implements FilterResolver {
             builders.add(SpecificationBuilder.of(Combiner.AND, filter));
         }
 
-//          FIXME required Space
-//        if (minimumRequiredSpace.isPresent()) {
-//            filter = new HashMap<>();
-//            criteria = new ArrayList<>();
-//
-//            criteria.add(Criteria.builder()
-//                    .operation(Operation.GREATER_THAN_EQUAL)
-//                    .key("hddDrives")
-//                    .value(minimumRequiredSpace.get())
-//                    .build());
-//
-//            criteria.add(Criteria.builder()
-//                    .operation(Operation.GREATER_THAN_EQUAL)
-//                    .key("ssdDrives")
-//                    .value(minimumRequiredSpace.get())
-//                    .build());
-//
-//            filter.put(JunctionType.OR, criteria);
-//
-//            builders.add(SpecificationBuilder.of(Combiner.AND, filter));
-//        }
+        if (minimumRequiredSpace.isPresent()) {
+            filter = new HashMap<>();
+            criteria = new ArrayList<>();
+
+            criteria.add(Criteria.builder()
+                    .operation(Operation.GREATER_THAN_EQUAL)
+                    .key("totalSpaceAvailable")
+                    .value(minimumRequiredSpace.get())
+                    .build());
+
+            filter.put(JunctionType.OR, criteria);
+
+            builders.add(SpecificationBuilder.of(Combiner.AND, filter));
+        }
 
         if (!requiredSystems.isEmpty()) {
             filter = new HashMap<>();

@@ -38,4 +38,5 @@ public class CpuData implements Serializable {
     private Integer cores;
     private Integer threads;
     private Integer instructionsPerCycle;
+    private boolean onlyLaptopCpu;
 }

@@ -22,7 +22,7 @@ import java.util.UUID;
 @Builder
 @Getter
 public class LaptopData implements Serializable {
-    private static final ProductType productType = ProductType.LAPTOP;
+    public static final ProductType productType = ProductType.LAPTOP;
 
     private final UUID productId;
     private final String title;

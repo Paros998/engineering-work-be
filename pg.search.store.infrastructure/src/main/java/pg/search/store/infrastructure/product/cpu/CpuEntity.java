@@ -54,6 +54,8 @@ public class CpuEntity extends ProductEntity {
 
     private Integer instructionsPerCycle;
 
+    private boolean onlyLaptopCpu;
+
     // in GFLOPs
     private Double basePerformance;
     private Double boostPerformance;
@@ -131,6 +133,11 @@ public class CpuEntity extends ProductEntity {
 
     public CpuEntity setProducer(final CpuProducer producer) {
         this.producer = producer;
+        return this;
+    }
+
+    public CpuEntity setOnlyLaptopCpu(boolean onlyLaptopCpu) {
+        this.onlyLaptopCpu = onlyLaptopCpu;
         return this;
     }
 

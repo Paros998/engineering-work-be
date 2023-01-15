@@ -39,3 +39,7 @@ aws:
   bucket: ${AMAZON_BUCKET_NAME}
   url: ${AMAZON_AWS_URL}
 
+currency:
+  api:
+    key: ${EXCHANGE_RATES_API_KEY}
+    url: ${EXCHANGE_RATES_API_URL}

@@ -17,6 +17,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import pg.search.store.infrastructure.user.UserService;
 import pg.search.store.spring.configuration.auth.FormLoginAuthenticationFilter;
 import pg.search.store.spring.configuration.auth.JwtTokenFilter;
+import pg.search.store.spring.configuration.auth.JwtTokenRefresher;
+
+import static pg.search.store.domain.user.Roles.ADMIN;
+import static pg.search.store.domain.user.Roles.CLIENT;
 
 @Configuration
 @EnableWebSecurity
@@ -26,14 +30,17 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final String jwtSecret;
+    private final JwtTokenRefresher tokenRefresher;
 
     @Autowired
     public ApplicationSecurityConfiguration(final UserService userService,
                                             final BCryptPasswordEncoder bCryptPasswordEncoder,
-                                            final @Value("${jwt.secret}") String jwtSecret) {
+                                            final @Value("${jwt.secret}") String jwtSecret,
+                                            final JwtTokenRefresher tokenRefresher) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.jwtSecret = jwtSecret;
+        this.tokenRefresher = tokenRefresher;
     }
 
     @Override
@@ -48,10 +55,11 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new FormLoginAuthenticationFilter(authenticationManager(), userService, jwtSecret))
-                .addFilterAfter(new JwtTokenFilter(jwtSecret), FormLoginAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenFilter(jwtSecret, tokenRefresher), FormLoginAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/index", "/css/*", "/js/*", "/swagger-ui.html").permitAll()
-
+                .antMatchers("**/login", "**/users/register-client", "**/auth/refresh-access").anonymous()
+                .antMatchers("**/notifications/**").hasAnyRole(ADMIN.name(), CLIENT.name())
         ;
     }
 

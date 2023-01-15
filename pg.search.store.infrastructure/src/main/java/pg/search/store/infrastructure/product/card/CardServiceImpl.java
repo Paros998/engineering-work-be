@@ -3,24 +3,69 @@ package pg.search.store.infrastructure.product.card;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import pg.lib.filters.common.Criteria;
+import pg.lib.filters.common.JunctionType;
+import pg.lib.filters.common.Operation;
+import pg.lib.filters.specification.Combiner;
+import pg.lib.filters.specification.SpecificationBuilder;
+import pg.lib.filters.specification.SpecificationCollector;
+
 import pg.search.store.domain.product.card.CardData;
 import pg.search.store.infrastructure.common.CommonData;
 import pg.search.store.infrastructure.common.exception.EntityNotFoundException;
+import pg.search.store.infrastructure.common.pageable.SpringPageRequest;
+import pg.search.store.infrastructure.common.pageable.SpringPageResponse;
 import pg.search.store.infrastructure.product.exception.ProductAlreadyExistsException;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
+
+    public SpringPageResponse<CardEntity> getCardsApplicableForBitcoinMining(final SpringPageRequest request, final String query) {
+        Map<JunctionType, List<Criteria>> criteria;
+        List<SpecificationBuilder> filters = new ArrayList<>();
+
+        final PageRequest pageable = request.getRequest(CardEntity.class);
+
+        criteria = new HashMap<>();
+
+        criteria.put(JunctionType.OR, Collections.singletonList(
+                Criteria.builder()
+                        .key("bitcoinHashRate")
+                        .operation(Operation.NOT_EQUAL_NULL)
+                        .build()
+        ));
+
+        filters.add(SpecificationBuilder.of(Combiner.AND, criteria));
+
+        if (query != null) {
+            criteria = new HashMap<>();
+
+            criteria.put(JunctionType.OR, List.of(
+                    Criteria.builder()
+                            .key("title").value(query).operation(Operation.MATCH)
+                            .build(),
+                    Criteria.builder()
+                            .key("producentCode").value(query).operation(Operation.MATCH)
+                            .build()
+            ));
+
+            filters.add(SpecificationBuilder.of(Combiner.AND, criteria));
+        }
+
+        Specification<CardEntity> spec = SpecificationCollector.createSpecification(filters);
+
+        return new SpringPageResponse<>(cardRepository.findAll(spec, pageable));
+    }
 
     public CardEntity getCardById(final @NonNull UUID cardId) {
         Optional<CardEntity> cardEntity = cardRepository.findById(cardId);
@@ -95,6 +140,7 @@ public class CardServiceImpl implements CardService {
                 .setTypeOfPciConnector(data.getTypeOfPciConnector())
                 .setMemoryClock(data.getMemoryClock())
                 .setMemoryBus(data.getMemoryBus())
-                .setMaxNumberOfUnitsInSLI(data.getMaxNumberOfUnitsInSLI());
+                .setMaxNumberOfUnitsInSLI(data.getMaxNumberOfUnitsInSLI())
+                .setBitcoinHashRate(data.getBitcoinHashRate());
     }
 }

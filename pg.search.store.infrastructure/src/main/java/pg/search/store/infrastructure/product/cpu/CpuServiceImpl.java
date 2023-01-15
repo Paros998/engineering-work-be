@@ -66,7 +66,8 @@ public class CpuServiceImpl implements CpuService {
                 .setVersion(data.getVersion())
                 .setCores(data.getCores())
                 .setThreads(data.getThreads())
-                .setInstructionsPerCycle(data.getInstructionsPerCycle());
+                .setInstructionsPerCycle(data.getInstructionsPerCycle())
+                .setOnlyLaptopCpu(data.isOnlyLaptopCpu());
 
     }
 }

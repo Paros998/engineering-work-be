@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import pg.search.store.domain.notification.NotificationType;
 import pg.search.store.domain.store.OfferData;
+import pg.search.store.domain.store.Stores;
 import pg.search.store.infrastructure.common.currency.CurrencyProvider;
 import pg.search.store.infrastructure.common.exception.EntityNotFoundException;
 import pg.search.store.infrastructure.notification.NotificationService;
@@ -35,7 +36,10 @@ public class OfferServiceImpl implements OfferService {
         }
 
         Optional<ProductEntity> product = productRepository.findById(data.getProductId());
-        Optional<StoreEntity> store = storeRepository.findById(data.getStoreId());
+        Optional<StoreEntity> store;
+        if (data.getStoreId() != null)
+            store = storeRepository.findById(data.getStoreId());
+        else store = storeRepository.findById(Stores.getDefaultStore());
 
         if (product.isEmpty()) {
             throw new EntityNotFoundException(data.getProductId(), ProductEntity.class);
