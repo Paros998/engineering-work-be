@@ -84,22 +84,22 @@
             <dependency>
                 <groupId>pg.search.store</groupId>
                 <artifactId>pg.search.store.standalone</artifactId>
-                <version>${pg.search.store.version}</version>
+            <version>${pg.search.store.version}</version>
             </dependency>
 
             <!-- Libraries -->
             <dependency>
-                <groupId>pg.lib</groupId>
+                <groupId>org.pg</groupId>
                 <artifactId>pg.lib.cqrs</artifactId>
                 <version>${pg-lib-cqrs-version}</version>
             </dependency>
             <dependency>
-                <groupId>pg.lib</groupId>
+                <groupId>org.pg</groupId>
                 <artifactId>pg.lib.aws-files</artifactId>
                 <version>${pg-lib-aws-version}</version>
             </dependency>
             <dependency>
-                <groupId>pg.lib</groupId>
+                <groupId>org.pg</groupId>
                 <artifactId>pg.lib.filters</artifactId>
                 <version>${pg-lib-filters-version}</version>
             </dependency>

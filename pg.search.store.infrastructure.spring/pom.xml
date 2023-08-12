@@ -65,11 +65,11 @@
 
         <!-- Libraries -->
         <dependency>
-            <groupId>pg.lib</groupId>
+            <groupId>org.pg</groupId>
             <artifactId>pg.lib.aws-files</artifactId>
         </dependency>
         <dependency>
-            <groupId>pg.lib</groupId>
+            <groupId>org.pg</groupId>
             <artifactId>pg.lib.cqrs</artifactId>
         </dependency>
 
